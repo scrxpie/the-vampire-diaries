@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 const Word = require("../models/Words"); // Kelime verisi modeli
 const Stat = require("../models/Stat"); // Stat modeli
 
@@ -12,7 +12,7 @@ module.exports = {
     const kelimeSayisi = kelimeVerisi?.kelime || 0;
 
     if (kelimeSayisi < 3000) {
-      const embed = new EmbedBuilder()
+      const embed = new MessageEmbed()
         .setTitle("📉 Yetersiz Kelime Sayısı")
         .setDescription(`Stat hakkı kazanmak için **en az 3000 kelime** yazmalısın.\nŞu an: **${kelimeSayisi}** kelimen var.`)
         .setColor("Red");
@@ -34,7 +34,7 @@ module.exports = {
     const verilecekHak = toplamKazanilabilir - zatenAlinan;
 
     if (verilecekHak <= 0) {
-      const embed = new EmbedBuilder()
+      const embed = new MessageEmbed()
         .setTitle("⚠️ Yeni Stat Hakkı Yok")
         .setDescription(`Tüm stat haklarını almışsın.\nYeni hak için daha fazla kelime yazmalısın! ✍️`)
         .setColor("Yellow");
@@ -46,7 +46,7 @@ module.exports = {
     statVerisi.kazanilanHak = toplamKazanilabilir;
     await statVerisi.save();
 
-    const embed = new EmbedBuilder()
+    const embed = new MessageEmbed()
       .setTitle("🧬 Stat Hakkı Kazanıldı!")
       .setDescription(`Toplam **${kelimeSayisi}** kelimen var.\n\n🎁 **${verilecekHak}** yeni stat hakkı kazandın!\n📦 Kullanılabilir toplam hak: **${statVerisi.hak}**`)
       .setColor("Green");
