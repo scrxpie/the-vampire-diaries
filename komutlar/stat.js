@@ -1,14 +1,14 @@
-const Stats = require('../models/Stat');
+const { MessageEmbed } = require("discord.js");
+const Stats = require("../models/Stat");
 
 function statBarYuzde(sayi) {
   const max = 5;
   const totalBlocks = 10;
 
-  // yüzdeyi hesapla
   const yuzde = Math.round((sayi / max) * 100);
 
   const doluBlocks = Math.floor((yuzde / 100) * totalBlocks);
-  const yariBlocks = (yuzde % 10 >= 5) ? 1 : 0;
+  const yariBlocks = yuzde % 10 >= 5 ? 1 : 0;
   const bosBlocks = totalBlocks - doluBlocks - yariBlocks;
 
   const dolu = "█".repeat(doluBlocks);
@@ -30,10 +30,19 @@ module.exports = {
       return message.reply("Henüz hiç stat hakkın veya stat verin yok. `.statal` komutuyla kelimelerini stata çevirebilirsin.");
     }
 
-    const tur = statVerisi.tur;
+    // 🔍 Kullanıcının rolüne göre tür belirleniyor:
+    let tur;
+
+    if (message.member.roles.cache.some(role => role.name === "Hunter")) {
+      tur = "Avcı";
+    } else if (message.member.roles.cache.some(role => role.name === "Human")) {
+      tur = "İnsan";
+    } else {
+      return message.reply("Rolünü belirleyemedim. `Hunter` ya da `Human` rolün yok gibi görünüyor.");
+    }
+
     const hak = statVerisi.hak ?? 0;
 
-    // küçük harfli key'ler olduğunu varsayıyorum
     const statsListesi = {
       guc: statVerisi.guc ?? 0,
       direnc: statVerisi.direnc ?? 0,
@@ -44,42 +53,34 @@ module.exports = {
       reflex: statVerisi.reflex ?? 0,
     };
 
-    let cevap = `🧬 **Stat Bilgilerin (${tur})**\n\n`;
+    const emojiler = {
+      guc: "💪",
+      direnc: "🛡️",
+      odak: "🎯",
+      irade: "🔥",
+      karizma: "👑",
+      zeka: "🧠",
+      reflex: "⚡",
+    };
 
-    if (tur === "Hunter") {
-      const avciStats = ["guc", "direnc", "odak", "irade", "karizma", "zeka", "reflex"];
-      const emojiler = {
-        guc: "💪",
-        direnc: "🛡️",
-        odak: "🎯",
-        irade: "🔥",
-        karizma: "👑",
-        zeka: "🧠",
-        reflex: "⚡",
-      };
+    const embed = new MessageEmbed()
+      .setColor("#0099ff")
+      .setTitle(`🧬 ${message.author.username} - Stat Bilgilerin`)
+      .setDescription(`Karakter Türü: **${tur}**\n🎁 Kullanılabilir Stat Hakkın: **${hak}**\n\u200b`);
 
-      for (const stat of avciStats) {
-        cevap += `${emojiler[stat]} ${stat.charAt(0).toUpperCase() + stat.slice(1)}: ${statBarYuzde(statsListesi[stat])}\n`;
-      }
-    } else if (tur === "Human") {
-      const insanStats = ["guc", "direnc", "odak", "karizma", "zeka"];
-      const emojiler = {
-        guc: "💪",
-        direnc: "🛡️",
-        odak: "🎯",
-        karizma: "👑",
-        zeka: "🧠",
-      };
+    let statSirasi = [];
 
-      for (const stat of insanStats) {
-        cevap += `${emojiler[stat]} ${stat.charAt(0).toUpperCase() + stat.slice(1)}: ${statBarYuzde(statsListesi[stat])}\n`;
-      }
-    } else {
-      cevap += "Stat türü tanımlı değil.";
+    if (tur === "Avcı") {
+      statSirasi = ["guc", "direnc", "odak", "irade", "karizma", "zeka", "reflex"];
+    } else if (tur === "İnsan") {
+      statSirasi = ["guc", "direnc", "odak", "karizma", "zeka"];
     }
 
-    cevap += `\n🎁 **Kullanılabilir Stat Hakkın:** ${hak}`;
+    for (const stat of statSirasi) {
+      const isim = stat.charAt(0).toUpperCase() + stat.slice(1);
+      embed.addField(`${emojiler[stat]} ${isim}`, statBarYuzde(statsListesi[stat]), true);
+    }
 
-    message.reply(cevap);
+    return message.reply({ embeds: [embed] });
   }
 };
