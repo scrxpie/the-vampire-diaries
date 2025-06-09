@@ -64,7 +64,7 @@ module.exports = {
     };
 
     const embed = new MessageEmbed()
-      .setColor("#0099ff")
+      
       .setTitle(`🧬 ${message.author.username} - Stat Bilgilerin`)
       .setDescription(`Karakter Türü: **${tur}**\n🎁 Kullanılabilir Stat Hakkın: **${hak}**\n\u200b`);
 
