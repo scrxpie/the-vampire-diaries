@@ -15,7 +15,7 @@ module.exports = {
       const embed = new MessageEmbed()
         .setTitle("📉 Yetersiz Kelime Sayısı")
         .setDescription(`Stat hakkı kazanmak için **en az 3000 kelime** yazmalısın.\nŞu an: **${kelimeSayisi}** kelimen var.`)
-        .setColor("Red");
+        .setColor("#ff0000");
 
       return message.reply({ embeds: [embed] });
     }
@@ -37,7 +37,7 @@ module.exports = {
       const embed = new MessageEmbed()
         .setTitle("⚠️ Yeni Stat Hakkı Yok")
         .setDescription(`Tüm stat haklarını almışsın.\nYeni hak için daha fazla kelime yazmalısın! ✍️`)
-        .setColor("Yellow");
+        .setColor("#ffff00");
 
       return message.reply({ embeds: [embed] });
     }
@@ -49,7 +49,7 @@ module.exports = {
     const embed = new MessageEmbed()
       .setTitle("🧬 Stat Hakkı Kazanıldı!")
       .setDescription(`Toplam **${kelimeSayisi}** kelimen var.\n\n🎁 **${verilecekHak}** yeni stat hakkı kazandın!\n📦 Kullanılabilir toplam hak: **${statVerisi.hak}**`)
-      .setColor("Green");
+      .setColor("#00ff00");
 
     return message.reply({ embeds: [embed] });
   }
