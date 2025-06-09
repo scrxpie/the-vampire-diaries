@@ -1,50 +1,56 @@
-const Words = require('../models/Words');
-const Stats = require('../models/Stat');
+const { EmbedBuilder } = require("discord.js");
+const Word = require("../models/Word"); // Kelime verisi modeli
+const Stat = require("../models/Stat"); // Stat modeli
 
 module.exports = {
   name: "statal",
-  description: "Kelimelerini belirtilen sayıda stat hakkına çevirir. Örn: .statal 2",
-  async execute(message, args) {
+  description: "Kelime sayına göre stat hakkı kazanırsın.",
+  async execute(message) {
     const userId = message.author.id;
 
-    const isAvci = message.member.roles.cache.some(r => r.name.toLowerCase() === "hunter");
-    const isInsan = message.member.roles.cache.some(r => r.name.toLowerCase() === "human");
+    const kelimeVerisi = await Word.findOne({ userId });
+    const kelimeSayisi = kelimeVerisi?.kelime || 0;
 
-    if (!isAvci && !isInsan) {
-      return message.reply("Stat sistemi için 'Avcı' veya 'İnsan' rolüne sahip olman gerekiyor.");
+    if (kelimeSayisi < 3000) {
+      const embed = new EmbedBuilder()
+        .setTitle("📉 Yetersiz Kelime Sayısı")
+        .setDescription(`Stat hakkı kazanmak için **en az 3000 kelime** yazmalısın.\nŞu an: **${kelimeSayisi}** kelimen var.`)
+        .setColor("Red");
+
+      return message.reply({ embeds: [embed] });
     }
 
-    const tur = isAvci ? "Hunter" : "Human";
-
-    const statAlinacak = parseInt(args[0]);
-    if (!statAlinacak || statAlinacak <= 0) {
-      return message.reply("Lütfen alacağın stat hakkı miktarını belirt (.statal 2 gibi).");
-    }
-
-    const kelimeVerisi = await Words.findById(userId);
-    if (!kelimeVerisi) return message.reply("Henüz hiç kelime verin yok!");
-
-    const hakEdilen = Math.floor(kelimeVerisi.words / 3000);
-    let statVerisi = await Stats.findById(userId);
-
+    let statVerisi = await Stat.findById(userId);
     if (!statVerisi) {
-      statVerisi = new Stats({ _id: userId, tur });
+      statVerisi = new Stat({
+        _id: userId,
+        hak: 0,
+        kazanilanHak: 0
+      });
     }
 
-    const toplamKullanilmis = (statVerisi.verilenStat || 0) + (statVerisi.hak || 0);
-    const kullanılabilir = hakEdilen - toplamKullanilmis;
+    const toplamKazanilabilir = Math.floor(kelimeSayisi / 3000);
+    const zatenAlinan = statVerisi.kazanilanHak || 0;
+    const verilecekHak = toplamKazanilabilir - zatenAlinan;
 
-    if (kullanılabilir <= 0) {
-      return message.reply("Kelime sayına göre yeni stat hakkın bulunmuyor.");
+    if (verilecekHak <= 0) {
+      const embed = new EmbedBuilder()
+        .setTitle("⚠️ Yeni Stat Hakkı Yok")
+        .setDescription(`Tüm stat haklarını almışsın.\nYeni hak için daha fazla kelime yazmalısın! ✍️`)
+        .setColor("Yellow");
+
+      return message.reply({ embeds: [embed] });
     }
 
-    if (statAlinacak > kullanılabilir) {
-      return message.reply(`En fazla ${kullanılabilir} stat hakkı alabilirsin.`);
-    }
-
-    statVerisi.hak = (statVerisi.hak || 0) + statAlinacak;
+    statVerisi.hak += verilecekHak;
+    statVerisi.kazanilanHak = toplamKazanilabilir;
     await statVerisi.save();
 
-    return message.reply(`✅ Başarıyla **${statAlinacak}** stat hakkı kazandın! Şu an toplam **${statVerisi.hak}** kullanılabilir stat hakkın var.`);
+    const embed = new EmbedBuilder()
+      .setTitle("🧬 Stat Hakkı Kazanıldı!")
+      .setDescription(`Toplam **${kelimeSayisi}** kelimen var.\n\n🎁 **${verilecekHak}** yeni stat hakkı kazandın!\n📦 Kullanılabilir toplam hak: **${statVerisi.hak}**`)
+      .setColor("Green");
+
+    return message.reply({ embeds: [embed] });
   }
 };
