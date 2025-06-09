@@ -1,5 +1,5 @@
 const { EmbedBuilder } = require("discord.js");
-const Word = require("../models/Word"); // Kelime verisi modeli
+const Word = require("../models/Words"); // Kelime verisi modeli
 const Stat = require("../models/Stat"); // Stat modeli
 
 module.exports = {
