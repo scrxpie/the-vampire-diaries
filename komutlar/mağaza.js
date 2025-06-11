@@ -12,12 +12,16 @@ module.exports = {
                 "Spor Araba - 45000$"
             ],
             "Evler": [
-                "Müstakil Ev - 20000$",
-                "Dublex Ev - 30000$",
-                "Orman Evi - 40000$",
-                "Dağ Evi - 50000$",
-                "Villa - 100000$",
-                "Malikane - 500000$"
+                "**1+0 Apartman - 50000$**",
+                "**1+1 Apartman - 60000$**",
+                "**2+1 Apartman - 70000$**",
+                "**3+1 Apartman - 80000$**",
+                "**Müstakil Ev - 100000$**",
+                "**Dublex Ev - 150000$**",
+                "**Orman Evi - 125000$**",
+                "**Dağ Evi - 100000$**",
+                "**Villa - 200000$**",
+                
             ],
             "Doğaüstü Silahlar ve Aletler": [
                 "**Normal Mermi - 500$**\n> Standart mühimmat. Doğaüstü varlıklara geçici etki.",
