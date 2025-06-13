@@ -22,7 +22,7 @@ module.exports = {
             )
             .addField('Kullanıcı:', member.user.username, true) // Kullanıcı adı
             .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 1024 })) // Sağ üst köşede kullanıcı avatarı
-            .setImage('https://i.imgur.com/gnJG7lk.gif') // Ayrılma GIF'i
+            .setImage('https://cdn.discordapp.com/attachments/1368538992257273993/1383064958429958296/IMG_5287.gif') // Ayrılma GIF'i
             .setFooter({
                 text: `Hoşçakal, ${member.user.username}!`,
                 iconURL: member.guild.iconURL({ dynamic: true }),
