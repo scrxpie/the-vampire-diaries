@@ -37,7 +37,7 @@ const roleID = '1368538991824998437'
                 > **Welcome! Please Tell Us Your Name And Age to Complete Your Registration on Our Roleplay Server.**`
             )
             .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 1024 })) // Sağ üst köşede kullanıcı avatarı
-            .setImage('https://i.imgur.com/zakdfkG.gif') // Hoş geldin GIF'i
+            .setImage('https://cdn.discordapp.com/attachments/1368538992257273993/1381571920499048550/IMG_1852.gif') // Hoş geldin GIF'i
             .setFooter({ text: 'Keyifli vakitler!', iconURL: member.user.displayAvatarURL({ dynamic: true }) });
 
         // Hoş geldin mesajını gönder
@@ -50,7 +50,7 @@ const roleID = '1368538991824998437'
             .setTitle(`𝐓𝐡𝐞 𝐎𝐭𝐡𝐞𝐫 𝐒𝐢𝐝𝐞 𝐒𝐮𝐧𝐮𝐜𝐮𝐬𝐮𝐧𝐚 𝐊𝐚𝐭ı𝐥𝐝ı.`)
             .setDescription('𝐴𝑟𝑎𝑚𝑖𝑧𝑎 𝐾𝑎𝑡𝑖𝑙𝑑𝑖𝑔̆𝑖𝑛 𝐼̇𝑐̧𝑖𝑛 𝑀𝑢𝑡𝑙𝑢𝑦𝑢𝑧.')
             .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 1024 })) // Sağ üst köşede kullanıcı avatarı
-            .setImage('https://cdn.discordapp.com/attachments/1210677407015510066/1216339461533732965/IMG_1649.gif') // Hoş geldin GIF'i
+            .setImage('https://cdn.discordapp.com/attachments/1368538992257273993/1381572122991788104/IMG_1854.gif') // Hoş geldin GIF'i
             .setFooter({ text: 'Keyifli vakitler!', iconURL: member.user.displayAvatarURL({ dynamic: true }) });
 
         logChannel.send({content: `> ${member} **Sunucuya Katıldı!**`,embeds: [logEmbed] });
