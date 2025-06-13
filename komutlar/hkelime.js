@@ -5,25 +5,29 @@ const AllowedChannel = require('../models/AllowedChannel');
 async function trackWords(message) {
   if (message.author.bot) return;
 
-  let channelId = message.channel.id;
+  let channel = message.channel;
 
-  // Eğer thread ise, ana kanal ID'sini al
-  if (message.channel.isThread()) {
-    channelId = message.channel.parentId;
+  // Thread ise ana kanalı al
+  if (channel.isThread()) {
+    channel = channel.parent;
   }
 
-  // MongoDB'den izin verilen kanal ID'lerini al
-  let allowedChannels;
+  // İzin verilen kanalları ve kategorileri çek
+  let docs;
   try {
-    const docs = await AllowedChannel.find({});
-    allowedChannels = docs.map(doc => doc.channelId);
+    docs = await AllowedChannel.find({});
   } catch (error) {
-    console.error('Kanal ID\'leri veritabanından alınamadı:', error);
+    console.error('Kanal ve kategori ID\'leri veritabanından alınamadı:', error);
     return;
   }
 
-  // Eğer kanal izinli değilse, işlem yapma
-  if (!allowedChannels.includes(channelId)) return;
+  const allowedChannels = docs.filter(d => d.type === 'channel').map(d => d.channelId);
+  const allowedCategories = docs.filter(d => d.type === 'category').map(d => d.channelId);
+
+  const isChannelAllowed = allowedChannels.includes(channel.id);
+  const isCategoryAllowed = channel.parentId && allowedCategories.includes(channel.parentId);
+
+  if (!isChannelAllowed && !isCategoryAllowed) return;
 
   const userId = message.author.id;
   const content = message.content.trim();
