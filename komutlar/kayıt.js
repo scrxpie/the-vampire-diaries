@@ -81,7 +81,7 @@ module.exports = {
                 )
                 .addField('Kayıt Eden:', message.author.toString(), true)
                 .setThumbnail(target.user.displayAvatarURL({ dynamic: true }))
-                .setImage('https://i.imgur.com/btr4bju.gif')
+                .setImage('https://cdn.discordapp.com/attachments/1368538998368112665/1383076313577033748/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f776174747061642d6d656469612d736572766963652f53746f727949...2f753839454552365353516d3557413d3d2d313030303430333838382e313661363935653761623665386231313930313531363031373435382e676966.gif')
                 .setFooter('Sunucumuza hoş geldiniz!', message.guild.iconURL({ dynamic: true }));
 
             if (logChannel) {
