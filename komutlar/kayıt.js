@@ -13,7 +13,7 @@ module.exports = {
             '1368538991632060438',
             '1368538991569272914'
         ]; // Oto roller
-        const logChannelID = '1368538998368112665'; // Log kanalı ID
+        const logChannelID = '1383126605957824603'; // Log kanalı ID
         const logChannel = message.guild.channels.cache.get(logChannelID);
 
         const target = message.mentions.members.first();
