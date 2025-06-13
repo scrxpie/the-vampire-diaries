@@ -1,5 +1,4 @@
-const fs = require('fs');
-let kanalVerisi = require('../data/kanalid.json');  // Veriyi alırken doğru yolu kontrol et
+const AllowedChannel = require('../models/AllowedChannel');
 
 module.exports = {
     name: 'kanalekle',
@@ -9,26 +8,23 @@ module.exports = {
             return message.reply('Bu komutu kullanabilmek için yönetici iznine sahip olmalısınız.');
         }
 
-        const channel = message.mentions.channels.first();  // Kullanıcıdan kanal al
+        const channel = message.mentions.channels.first();
 
         if (!channel) {
             return message.reply('Lütfen bir kanal belirtin.');
         }
 
-        // allowedChannels dizisini kontrol et
-        if (!Array.isArray(kanalVerisi.allowedChannels)) {
-            return message.reply('Kanal listesi hatalı. Lütfen yöneticinize başvurun.');
+        try {
+            const existing = await AllowedChannel.findOne({ channelId: channel.id });
+            if (existing) {
+                return message.reply('Bu kanal zaten eklenmiş.');
+            }
+
+            await AllowedChannel.create({ channelId: channel.id });
+            return message.reply(`✅ Kanal başarıyla eklendi: ${channel}`);
+        } catch (err) {
+            console.error('Kanal eklenirken hata oluştu:', err);
+            return message.reply('Bir hata oluştu, kanal eklenemedi.');
         }
-
-        // Kanal zaten eklenmiş mi kontrol et
-        if (kanalVerisi.allowedChannels.includes(channel.id)) {
-            return message.reply('Bu kanal zaten eklenmiş.');
-        }
-
-        // Kanalı ekle
-        kanalVerisi.allowedChannels.push(channel.id);
-        fs.writeFileSync('./data/kanalid.json', JSON.stringify(kanalVerisi, null, 2));
-
-        message.reply(`Kanal başarıyla eklendi: ${channel}`);
     },
 };
