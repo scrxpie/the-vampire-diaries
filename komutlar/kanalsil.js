@@ -1,30 +1,48 @@
 const AllowedChannel = require('../models/AllowedChannel');
 
 module.exports = {
-    name: 'kanalsil',
-    description: 'Bir kanalı izinli listeden siler.',
-    async execute(message, args) {
-        if (!message.member.permissions.has('ADMINISTRATOR')) {
-            return message.reply('Bu komutu kullanabilmek için yönetici iznine sahip olmalısınız.');
-        }
+  name: 'kanalsil',
+  description: 'Bir kanal veya kategori izin listesinden siler. Kullanım: .kanalsil #kanal veya .kanalsil kategori KategoriAdı',
+  async execute(message, args) {
+    if (!message.member.permissions.has('ADMINISTRATOR')) {
+      return message.reply('Bu komutu kullanabilmek için yönetici iznine sahip olmalısınız.');
+    }
 
-        const channel = message.mentions.channels.first();
+    if (!args[0]) {
+      return message.reply('Lütfen bir kanal veya kategori belirtin.');
+    }
 
-        if (!channel) {
-            return message.reply('Lütfen bir kanal belirtin.');
-        }
+    if (args[0].toLowerCase() === 'kategori') {
+      // Kategori silme
+      const categoryName = args.slice(1).join(' ');
+      if (!categoryName) {
+        return message.reply('Lütfen silmek istediğiniz kategori adını yazın.');
+      }
 
-        try {
-            const existing = await AllowedChannel.findOne({ channelId: channel.id });
-            if (!existing) {
-                return message.reply('Bu kanal listede bulunmuyor.');
-            }
+      const category = message.guild.channels.cache.find(c => c.type === 4 && c.name.toLowerCase() === categoryName.toLowerCase());
+      if (!category) {
+        return message.reply('Belirtilen isimde kategori bulunamadı.');
+      }
 
-            await AllowedChannel.deleteOne({ channelId: channel.id });
-            return message.reply(`❌ Kanal başarıyla listeden silindi: ${channel}`);
-        } catch (err) {
-            console.error('Kanal silinirken hata oluştu:', err);
-            return message.reply('Bir hata oluştu, kanal silinemedi.');
-        }
-    },
+      const deleted = await AllowedChannel.findOneAndDelete({ channelId: category.id, type: 'category' });
+      if (!deleted) {
+        return message.reply('Bu kategori izin verilenler listesinde bulunmamaktadır.');
+      }
+
+      return message.reply(`Kategori başarıyla silindi: **${category.name}**`);
+    } else {
+      // Kanal silme
+      const channel = message.mentions.channels.first();
+      if (!channel) {
+        return message.reply('Lütfen silmek istediğiniz kanalı etiketleyin.');
+      }
+
+      const deleted = await AllowedChannel.findOneAndDelete({ channelId: channel.id, type: 'channel' });
+      if (!deleted) {
+        return message.reply('Bu kanal izin verilenler listesinde bulunmamaktadır.');
+      }
+
+      return message.reply(`Kanal başarıyla silindi: ${channel}`);
+    }
+  }
 };
