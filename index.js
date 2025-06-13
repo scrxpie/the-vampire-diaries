@@ -339,7 +339,7 @@ module.exports = (client) => {
         // Eğer boost seviyesi yükselmişse
         if (oldGuild.premiumSubscriptionCount < newGuild.premiumSubscriptionCount) {
             // Son boost atan kullanıcıyı bulmak için sunucudaki booster rolüne sahip kişileri al
-            const boosterRoleID = "1327637020767555626"; // Booster rolünün ID'si
+            const boosterRoleID = "1370821728778846328"; // Booster rolünün ID'si
             const boosterMembers = newGuild.members.cache.filter(member => member.roles.cache.has(boosterRoleID));
             
             // Yeni boost atan kişiyi belirlemek zor olabilir, en son boost atan kişiyi almak için bir tahminde bulunabiliriz
@@ -358,9 +358,9 @@ module.exports = (client) => {
                     *The Other Side'a takviye yaptığın için teşekkür ederiz!  
                     Özel ayrıcalıklar ve ödüllerr kazandın!*  
                     **🎁 𝐀𝐘𝐑𝐈𝐂𝐀𝐋𝐈𝐊 𝐁𝐈𝐋𝐆𝐈𝐋𝐄𝐑𝐈:**  
-                    - <#1344672089323343994>  
+                    - <#1368538996631670868>  
                 `)
-                .setImage("https://i.imgur.com/j5Tl3uk.gif")
+                .setImage("https://cdn.discordapp.com/attachments/1368538992257273993/1383067720601440320/IMG_5285.gif")
                 .setFooter(`Şu anki boost sayısı: ${newGuild.premiumSubscriptionCount}`);
 
             channel.send({ content: `<@${latestBooster.id}>`, embeds: [embed] });
