@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
-const WeeklyWords = require('../../models/WeeklyWords');
-const AllowedChannel = require('../../models/AllowedChannel');
+const WeeklyWords = require('../models/WeeklyWords');
+const AllowedChannel = require('../models/AllowedChannel');
 
 async function trackWords(message) {
   if (message.author.bot) return;
