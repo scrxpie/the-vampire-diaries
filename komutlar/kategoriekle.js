@@ -1,4 +1,4 @@
-const AllowedChannel = require('../../models/AllowedChannel');
+const AllowedChannel = require('../models/AllowedChannel');
 
 module.exports = {
   name: 'kategoriekle',
