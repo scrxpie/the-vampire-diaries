@@ -37,7 +37,7 @@ const roleID = '1368538991824998437'
                 > **Welcome! Please Tell Us Your Name And Age to Complete Your Registration on Our Roleplay Server.**`
             )
             .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 1024 })) // Sağ üst köşede kullanıcı avatarı
-            .setImage('https://cdn.discordapp.com/attachments/1368538992257273993/1381571920499048550/IMG_1852.gif') // Hoş geldin GIF'i
+            .setImage('https://cdn.discordapp.com/attachments/1329559412079198431/1383149160408154122/9b8bea37d8b0f268e2f7d1a0ad17976e.gif') // Hoş geldin GIF'i
             .setFooter({ text: 'Keyifli vakitler!', iconURL: member.user.displayAvatarURL({ dynamic: true }) });
 
         // Hoş geldin mesajını gönder
