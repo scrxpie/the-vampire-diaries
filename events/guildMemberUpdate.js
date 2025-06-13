@@ -7,8 +7,8 @@ module.exports = {
         if (!oldMember.premiumSince && newMember.premiumSince) {
             // 3 saniye gecikme ekleyerek boost işleminin gerçekten tamamlanmasını bekleyelim
             setTimeout(() => {
-                const boosterRoleID = "1327637020767555626"; // Booster rolü ID'si
-                const boosterChannelID = "1327984835603468319"; // Boost teşekkür mesajının gideceği kanal ID'si
+                const boosterRoleID = "1370821728778846328"; // Booster rolü ID'si
+                const boosterChannelID = "1368538996631670867"; // Boost teşekkür mesajının gideceği kanal ID'si
                 const channel = newMember.guild.channels.cache.get(boosterChannelID);
                 
                 if (!channel) return;
