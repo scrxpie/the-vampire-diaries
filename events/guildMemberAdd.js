@@ -4,7 +4,7 @@ module.exports = {
     name: 'guildMemberAdd',
     execute(member) {
         // Hoş geldin mesajı kanalı
-        const welcomeChannel = member.guild.channels.cache.get('1368538996631670866'); // Hoş geldin kanalı ID'sini buraya girin
+        const welcomeChannel = member.guild.channels.cache.get('1383138050749628477'); // Hoş geldin kanalı ID'sini buraya girin
         if (!welcomeChannel) return console.error('Hoş geldin kanalı bulunamadı!');
 
         // Log mesajı kanalı
