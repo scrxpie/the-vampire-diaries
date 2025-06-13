@@ -5,10 +5,10 @@ module.exports = {
   description: 'Başka bir rol seti sunar ve kullanıcıların bu rolleri alıp çıkarmasına olanak verir.',
   async execute(message, args) {
     const roles = [
-      { name: 'Partner Ping', id: '1330264276447006822' },
-      { name: 'Bot Duyuru Ping', id: '1356981767923433643' },
-      { name: 'RolePlay Ping', id: '1381214693053567117' },
-      { name: 'Oyun Ping', id: '1381214829410385960' }
+      { name: 'Partner Ping', id: '1368538991632060437' },
+      { name: 'Bot Duyuru Ping', id: '1368538991569272919' },
+      { name: 'RolePlay Ping', id: '1383138609858871418' },
+      { name: 'Oyun Ping', id: '1383133775747350669' }
     ];
 
     const row = new MessageActionRow();
