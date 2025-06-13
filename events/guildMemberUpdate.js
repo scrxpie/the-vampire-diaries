@@ -21,9 +21,9 @@ module.exports = {
                         *The Other Side'a takviye yaptığın için teşekkür ederiz!  
                         Özel ayrıcalıklar ve ödüller kazandın!*  
                         ** 𝐀𝐘𝐑𝐈𝐂𝐀𝐋𝐈𝐊 𝐁𝐈𝐋𝐆𝐈𝐋𝐄𝐑𝐈:**  
-                        - <#1329567625809887383>  
+                        - <#1368538996631670868>  
                     `)
-                    .setImage("https://i.imgur.com/j5Tl3uk.gif")
+                    .setImage("https://cdn.discordapp.com/attachments/1368538992257273993/1383067720601440320/IMG_5285.gif")
                     .setFooter(`Şu anki boost sayısı: ${newMember.guild.premiumSubscriptionCount}`);
 
                 channel.send({ content: `<@${newMember.id}>`, embeds: [embed] });
