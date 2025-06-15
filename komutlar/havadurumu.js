@@ -24,7 +24,6 @@ function havaDurumuEmbed(data) {
     )
     .setThumbnail(`http://openweathermap.org/img/wn/${ikon}@2x.png`)
     .setColor('#1E90FF')
-    .setFooter({ text: 'OpenWeatherMap API kullanılarak güncellenmiştir.', iconURL: 'https://openweathermap.org/themes/openweathermap/assets/img/logo_white_cropped.png' })
     .setTimestamp();
 }
 
