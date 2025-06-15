@@ -23,8 +23,8 @@ module.exports = {
     }
 
     // Özel ship kontrolü: Eğer belirlenen iki kullanıcı shipleniyorsa, uyum oranı 100000
-    const specialUser1Id = '1085933161101394050'; // Özel shiplenecek ilk kullanıcının ID'si
-    const specialUser2Id = '1224046866971234365'; 
+    const specialUser1Id = '603605988804788423'; // Özel shiplenecek ilk kullanıcının ID'si
+    const specialUser2Id = '1377307880080019537'; 
     const specialUser3Id = '996355790631862272'; // Yeni kullanıcı 3 ID'si
     const specialUser4Id = '564468317977575443'; // Yeni kullanıcı 4 ID'si
     const negativeUserId = '533727549625204747';
@@ -37,8 +37,8 @@ module.exports = {
       (user1.id === specialUser1Id && user2.id === specialUser2Id) ||
       (user1.id === specialUser2Id && user2.id === specialUser1Id)
     ) {
-      randomShipNumber = 10000; // Özel ship uyum oranı
-      specialMessage = ''; // Özel mesaj
+      randomShipNumber = 99999; // Özel ship uyum oranı
+      specialMessage = 'Ohaaaaaaaaa'; // Özel mesaj
     } else if (
       (user1.id === specialUser3Id && user2.id === specialUser4Id) ||
       (user1.id === specialUser4Id && user2.id === specialUser3Id)
