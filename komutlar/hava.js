@@ -35,7 +35,6 @@ module.exports = {
         )
         .setThumbnail(`http://openweathermap.org/img/wn/${ikon}@2x.png`)
         .setColor('#1E90FF')
-        .setFooter({ text: 'OpenWeatherMap üzerinden alınmıştır.', iconURL: 'https://openweathermap.org/themes/openweathermap/assets/img/logo_white_cropped.png' })
         .setTimestamp();
 
       message.channel.send({ embeds: [embed] });
