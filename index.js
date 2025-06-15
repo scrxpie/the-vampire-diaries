@@ -562,7 +562,7 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
   console.log(`Web sunucusu ${port} portunda çalışıyor!`);
 });
-const cron = require('node-cron');
+
 const { updateVoiceChannelName } = require('./utils/dolunayses');
 
 
@@ -577,7 +577,11 @@ cron.schedule('*/5 * * * *', () => {
 
 });
 
+const ayPanoGuncelle = require('./utils/dolunay');
 
+
+  ayPanoGuncelle(client);  // cron burada başlayacak
+});
 const weatherSender = require('./utils/havadurumu'); 
 weatherSender(client);
 
