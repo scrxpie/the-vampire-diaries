@@ -562,9 +562,19 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
   console.log(`Web sunucusu ${port} portunda çalışıyor!`);
 });
+const cron = require('node-cron');
+const { updateVoiceChannelName } = require('./utils/dolunayses');
 
+
+  
 client.on('ready', () => {
   console.log(`Bot ${client.user.tag} olarak giriş yaptı!`);
+
+cron.schedule('*/5 * * * *', () => {
+    updateVoiceChannelName(client);
+  });
+
+
 });
 
 
