@@ -68,8 +68,8 @@ const KANAL_ID = '1383822193087086623'; // 📌 BURAYI DEĞİŞTİR
 let panoMesajId = null;
 
 module.exports = (client) => {
-  cron.schedule('0 * * * *', async () => { // Her saat başı çalışır
-    try {
+  cron.schedule('*/5 * * * *', async () => { ... }); 
+  try {
       const kanal = await client.channels.fetch(KANAL_ID);
       if (!kanal || kanal.type !== 'GUILD_TEXT') {
         console.error('Metin kanalı bulunamadı.');
