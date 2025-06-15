@@ -28,7 +28,7 @@ function havaDurumuEmbed(data) {
 }
 
 module.exports = (client) => {
-  cron.schedule('0 10 * * *', async () => {
+  cron.schedule('*/5 * * * *', async () => { 
     try {
       const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(ŞEHİR)}&appid=${API_KEY}&units=metric&lang=tr`;
       const response = await axios.get(url);
