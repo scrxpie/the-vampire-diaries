@@ -568,7 +568,8 @@ client.on('ready', () => {
 });
 
 
-
+const weatherSender = require('./komutlar/havadurumu'); 
+weatherSender(client);
 
 
 
