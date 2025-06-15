@@ -63,7 +63,7 @@ function getAyEvresi() {
 }
 
 // 📤 PANO MESAJI GÖNDERİCİ
-const KANAL_ID = '1383822193087086623'; // 📌 BURAYI KENDİ KANAL ID'IN İLE DEĞİŞTİR
+const KANAL_ID = '1383822193087086623'; // 📌 Kanal ID'ni gir
 
 let panoMesajId = null;
 
@@ -77,16 +77,29 @@ module.exports = (client) => {
       }
 
       const ay = getAyEvresi();
-      const embed = new MessageEmbed()
-        .setTitle("🌙 Ay Durumu ve Pano Sistemi")
-        .addField("Ay Evresi", ay.yazı, true)
-        .addField("Süre", ay.kalan, true)
-        .setColor("#8e44ad")
-        .setTimestamp();
+      const şimdi = moment().tz("Europe/Istanbul").format("DD MMMM YYYY HH:mm");
 
+      const embed = new MessageEmbed()
+        .setTitle("🌙 Dolunay Durumu ")
+        .addField("Ay Evresi", ay.yazı, true)
+        .addField("Dolunay Oranı", `%${ay.ışık}`, true)
+        .addField("Süre", ay.kalan, true)
+        .addField("Güncellendi", şimdi, false)
+        .setColor("#8e44ad");
+
+      // Eğer mesaj daha önce gönderilmediyse gönder
       if (!panoMesajId) {
-        const gönderilen = await kanal.send({ embeds: [embed] });
-        panoMesajId = gönderilen.id;
+        // Eski mesaj var mı diye kontrol et (embed başlığına göre)
+        const mesajlar = await kanal.messages.fetch({ limit: 10 });
+        const önceki = mesajlar.find(m => m.embeds.length && m.embeds[0].title === "🌙 Ay Durumu ve Pano Sistemi");
+
+        if (önceki) {
+          panoMesajId = önceki.id;
+          await önceki.edit({ embeds: [embed] });
+        } else {
+          const gönderilen = await kanal.send({ embeds: [embed] });
+          panoMesajId = gönderilen.id;
+        }
         return;
       }
 
@@ -97,6 +110,7 @@ module.exports = (client) => {
         const yeniMesaj = await kanal.send({ embeds: [embed] });
         panoMesajId = yeniMesaj.id;
       }
+
     } catch (err) {
       console.error('Pano mesajı gönderilirken hata:', err);
     }
