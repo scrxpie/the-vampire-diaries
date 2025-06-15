@@ -38,7 +38,7 @@ module.exports = {
       (user1.id === specialUser2Id && user2.id === specialUser1Id)
     ) {
       randomShipNumber = 99999; // Özel ship uyum oranı
-      specialMessage = 'Ohaaaaaaaaa'; // Özel mesaj
+      specialMessage = 'Ohaaaaaaaaa ayca♡yusuf'; // Özel mesaj
     } else if (
       (user1.id === specialUser3Id && user2.id === specialUser4Id) ||
       (user1.id === specialUser4Id && user2.id === specialUser3Id)
