@@ -20,7 +20,9 @@
     "mongoose": "^8.14.3",
     "node-cron": "^3.0.3",
     "sqlite3": "^5.1.7",
-    "uuid": "^11.1.0"
+    "uuid": "^11.1.0",
+     "moment": "^2.29.4",
+    "moment-timezone": "^0.5.43"
   },
   "engines": {
     "node": "16.x"
