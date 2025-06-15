@@ -1,5 +1,5 @@
 const moment = require('moment-timezone');
-const { getAyEvresi } = require('./utils/dolunay');
+const { getAyEvresi } = require('./dolunay');
 
 const SES_KANALI_ID = '1383822441750724669'; // Ses kanalının ID'si
 
