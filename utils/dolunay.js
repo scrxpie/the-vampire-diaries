@@ -63,13 +63,13 @@ function getAyEvresi() {
 }
 
 // 📤 PANO MESAJI GÖNDERİCİ
-const KANAL_ID = '1383822193087086623'; // 📌 BURAYI DEĞİŞTİR
+const KANAL_ID = '1383822193087086623'; // 📌 BURAYI KENDİ KANAL ID'IN İLE DEĞİŞTİR
 
 let panoMesajId = null;
 
 module.exports = (client) => {
-  cron.schedule('*/5 * * * *', async () => 
-  try {
+  cron.schedule('*/5 * * * *', async () => {
+    try {
       const kanal = await client.channels.fetch(KANAL_ID);
       if (!kanal || kanal.type !== 'GUILD_TEXT') {
         console.error('Metin kanalı bulunamadı.');
@@ -97,7 +97,6 @@ module.exports = (client) => {
         const yeniMesaj = await kanal.send({ embeds: [embed] });
         panoMesajId = yeniMesaj.id;
       }
-
     } catch (err) {
       console.error('Pano mesajı gönderilirken hata:', err);
     }
