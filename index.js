@@ -209,7 +209,7 @@ async function calculateLevelAndReward(userId, client, notificationChannelId) {
         const embed = new MessageEmbed()
           .setTitle('Seviye Atladınız!')
           .setDescription(`🎉 Tebrikler <@${userId}>! **Seviye ${currentLevel}** oldunuz ve **${reward}$** kazandınız!`)
-          .setColor('Gold')
+          .setColor('#FFD700')
           .setTimestamp();
 
         channel.send({ content: `<@${userId}>`, embeds: [embed] });
@@ -278,7 +278,7 @@ client.on('messageCreate', async (message) => {
     const embed = new MessageEmbed()
       .setTitle('Arcane Seviye Ödülü!')
       .setDescription(`🎉 Tebrikler ${member.user.username}! Arcane'de seviye **${level}** oldunuz ve **${reward}$** kazandınız!`)
-      .setColor('Blue')
+      .setColor('#00ff00')
       .setTimestamp();
 
     message.channel.send({ embeds: [embed] });
