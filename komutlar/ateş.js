@@ -21,7 +21,7 @@ const atesOranlari = {
   5: { isabet: 6, siyirdi: 2, kacirdi: 2 }
 };
 
-// Yardımcı: Rastgele sayı üret
+// Rastgele sayı üretici
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -40,7 +40,7 @@ module.exports = {
     const mermi = args.join(" ").trim();
     const mermiLower = mermi.toLowerCase();
 
-    if (!mermilerFiyatVeEtki[mermi]) {
+    if (!mermilerFiyatVeEtki.hasOwnProperty(mermi)) {
       return message.reply(`Geçersiz mermi tipi. Geçerli mermiler: ${Object.keys(mermilerFiyatVeEtki).join(", ")}`);
     }
 
@@ -50,8 +50,16 @@ module.exports = {
       return message.reply("Envanterin bulunamadı.");
     }
 
-    // Büyük/küçük harf ve boşluklara dikkat ederek kontrol
-    const envanterItemVar = envanter.items.some(item => item.toLowerCase().trim() === mermiLower);
+    // Envanterde mermi var mı kontrol et
+    const envanterItemVar = envanter.items.some(item => {
+      const regex = /^(\d+)x (.+)$/i;
+      const match = item.match(regex);
+      if (match) {
+        return match[2].toLowerCase().trim() === mermiLower;
+      } else {
+        return item.toLowerCase().trim() === mermiLower;
+      }
+    });
 
     if (!envanterItemVar) {
       return message.reply(`Envanterinde **${mermi}** bulunmuyor.`);
@@ -67,7 +75,6 @@ module.exports = {
     const oranlar = atesOranlari[odakStat];
 
     // Olasılıkları hazırla
-    // 0: isabet, 1: siyirdi, 2: kacirdi olarak düşün
     let olaslikDizisi = [];
     for (let i = 0; i < oranlar.isabet; i++) olaslikDizisi.push("isabet");
     for (let i = 0; i < oranlar.siyirdi; i++) olaslikDizisi.push("siyirdi");
@@ -76,10 +83,34 @@ module.exports = {
     // Rastgele sonuç
     const sonuc = olaslikDizisi[randomInt(0, olaslikDizisi.length - 1)];
 
-    // Mermiyi envanterden çıkar
-    const index = envanter.items.findIndex(item => item.toLowerCase().trim() === mermiLower);
+    // Mermiyi envanterden çıkar (miktar 1'den fazla ise miktarı azalt)
+    const index = envanter.items.findIndex(item => {
+      const regex = /^(\d+)x (.+)$/i;
+      const match = item.match(regex);
+      if (match) {
+        return match[2].toLowerCase().trim() === mermiLower;
+      } else {
+        return item.toLowerCase().trim() === mermiLower;
+      }
+    });
+
     if (index > -1) {
-      envanter.items.splice(index, 1);
+      const item = envanter.items[index];
+      const regex = /^(\d+)x (.+)$/i;
+      const match = item.match(regex);
+      if (match) {
+        let miktar = parseInt(match[1]);
+        let isim = match[2];
+        if (miktar > 1) {
+          miktar--;
+          envanter.items[index] = `${miktar}x ${isim}`;
+        } else {
+          envanter.items.splice(index, 1);
+        }
+      } else {
+        // Miktar bilgisi yoksa direkt çıkar
+        envanter.items.splice(index, 1);
+      }
       await envanter.save();
     }
 
