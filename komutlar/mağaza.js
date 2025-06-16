@@ -43,7 +43,7 @@ module.exports = {
         "**Triskelion - 12000$**\n> Beta kurtlar için denge aracı.",
         "**Kurtboğanlı İğne - 3000$**\n> Sessiz ve zayıflatıcı saldırı.",
         "**Zayıf Noktalar Kitabı - 15000$**\n> Tüm türlerin zayıflıkları.",
-        "**Dağ Külü (5 kişilik) - 10000$**\n> Kitsune ve ruhani varlıklara karşı bariyer sağlar.",
+        "**Üvez Tozu - 10000$**\n> Kitsune ve ruhani varlıklara karşı bariyer sağlar.",
         "**Kurtboğan - 1500$**\n> Doğaüstü varlıklara acı ve zayıflık verir.",
         "**Sarı Kurtboğan - 50000$**\n> Daha etkili kurtboğan türü."
     ],
