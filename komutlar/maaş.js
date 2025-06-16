@@ -33,56 +33,57 @@ module.exports = {
     const now = Date.now();
     const oneWeek = 7 * 24 * 60 * 60 * 1000;
 
-    // Maaş verisini bul ya da yeni oluştur
+    // Kullanıcının maaş verisi
     let salaryData = await Salary.findOne({ userId });
+
     if (!salaryData) {
       salaryData = new Salary({
-        userId,
-        lastClaim: null,
+        userId: userId,
+        lastClaimed: 0,
         salaryBlocked: false
       });
-      await salaryData.save();
     }
 
     if (salaryData.salaryBlocked) {
       return message.reply('RolePlay’de aktif olmadığınız için bu hafta maaş alamazsınız.');
     }
 
-    const lastClaim = salaryData.lastClaim ? salaryData.lastClaim.getTime() : 0;
-    if (now - lastClaim < oneWeek) {
-      const remaining = oneWeek - (now - lastClaim);
+    if (now - (salaryData.lastClaimed ?? 0) < oneWeek) {
+      const remaining = oneWeek - (now - salaryData.lastClaimed);
       const days = Math.floor(remaining / (24 * 60 * 60 * 1000));
       const hours = Math.floor((remaining % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
       const minutes = Math.floor((remaining % (60 * 60 * 1000)) / (60 * 1000));
 
-      return message.reply(`Zaten maaş aldın. Yeni maaşı tekrar almak için **${days} gün, ${hours} saat, ${minutes} dakika** beklemelisin.`);
+      return message.reply(`Zaten maaş aldın. Yeni maaşı almak için **${days} gün, ${hours} saat, ${minutes} dakika** beklemelisin.`);
     }
 
     const member = message.member;
-    const salaryAmount = Object.keys(roles).reduce((maxSalary, roleId) => {
-      return member.roles.cache.has(roleId) ? Math.max(maxSalary, roles[roleId]) : maxSalary;
+    const salaryAmount = Object.keys(roles).reduce((acc, roleId) => {
+      return member.roles.cache.has(roleId) ? Math.max(acc, roles[roleId]) : acc;
     }, 0);
 
     if (salaryAmount === 0) {
       return message.reply('Maaş alabileceğiniz bir rolünüz bulunmuyor.');
     }
 
-    // Kullanıcının bakiyesini güncelle
+    // Balance veritabanına para ekle
     await Balance.findOneAndUpdate(
       { userId },
       { $inc: { balance: salaryAmount } },
       { upsert: true }
     );
 
-    salaryData.lastClaim = new Date();
+    // Maaş verisini güncelle
+    salaryData.lastClaimed = now;
     await salaryData.save();
 
+    // Embed mesajı
     const embed = new MessageEmbed()
       .setTitle('༒ Maaş Ödendi')
-      .setDescription(`**${salaryAmount} $** maaş hesabınıza yatırıldı.`)
+      .setDescription(`**${salaryAmount}$** maaş hesabınıza yatırıldı.`)
       .setFooter({ text: '༒ | Haftalık maaş sistemi' })
       .setTimestamp();
 
-    message.reply({ embeds: [embed] });
+    return message.reply({ embeds: [embed] });
   }
 };
