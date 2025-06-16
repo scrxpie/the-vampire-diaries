@@ -73,7 +73,7 @@ module.exports = {
     );
 
     const embed = new MessageEmbed()
-      .setColor('GREEN')
+     
       .setTitle('📥 Maaş Alındı')
       .setDescription(`**${message.author.username}**, haftalık maaşını aldı: **${maxSalary.toLocaleString()}$**`)
       .setFooter({ text: '༒ | Maaş sistemi' })
