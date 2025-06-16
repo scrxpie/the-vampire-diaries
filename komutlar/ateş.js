@@ -38,6 +38,7 @@ module.exports = {
     }
 
     const mermi = args.join(" ").trim();
+    const mermiLower = mermi.toLowerCase();
 
     if (!mermilerFiyatVeEtki[mermi]) {
       return message.reply(`Geçersiz mermi tipi. Geçerli mermiler: ${Object.keys(mermilerFiyatVeEtki).join(", ")}`);
@@ -49,9 +50,8 @@ module.exports = {
       return message.reply("Envanterin bulunamadı.");
     }
 
-    // Büyük/küçük harf uyumu için kontrol
-    const mermiLower = mermi.toLowerCase();
-    const envanterItemVar = envanter.items.some(item => item.toLowerCase() === mermiLower);
+    // Büyük/küçük harf ve boşluklara dikkat ederek kontrol
+    const envanterItemVar = envanter.items.some(item => item.toLowerCase().trim() === mermiLower);
 
     if (!envanterItemVar) {
       return message.reply(`Envanterinde **${mermi}** bulunmuyor.`);
@@ -77,7 +77,7 @@ module.exports = {
     const sonuc = olaslikDizisi[randomInt(0, olaslikDizisi.length - 1)];
 
     // Mermiyi envanterden çıkar
-    const index = envanter.items.findIndex(item => item.toLowerCase() === mermiLower);
+    const index = envanter.items.findIndex(item => item.toLowerCase().trim() === mermiLower);
     if (index > -1) {
       envanter.items.splice(index, 1);
       await envanter.save();
