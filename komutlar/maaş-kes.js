@@ -1,4 +1,4 @@
-const { PermissionsBitField } = require('discord.js');
+const { Permissions } = require('discord.js');
 const Salary = require('../models/Salary');
 
 module.exports = {
@@ -6,7 +6,8 @@ module.exports = {
   description: 'Bir kullanıcının maaşını keser.',
   usage: '.maaş-kes @kullanıcı',
   async execute(message, args) {
-    if (!message.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
+    // Yönetici izni kontrolü (v13)
+    if (!message.member.hasPermission(Permissions.FLAGS.ADMINISTRATOR)) {
       return message.reply('Bu komutu kullanmak için yönetici olmalısın.');
     }
 
