@@ -21,33 +21,6 @@ const atesOranlari = {
   5: { isabet: 6, siyirdi: 2, kacirdi: 2 }
 };
 
-// İsabet vurulan bölgeler ve ağırlıkları (örnek)
-const isabetBolgeleri = [
-  { bolge: "Kafa", agirlik: 1 },   // %10 ihtimal
-  { bolge: "Gövde", agirlik: 4 }, // %40 ihtimal
-  { bolge: "Kol", agirlik: 3 },    // %30 ihtimal
-  { bolge: "Bacak", agirlik: 2 }   // %20 ihtimal
-];
-
-// Sıyırma bölgeleri ve ağırlıkları (benzer ama biraz farklı olabilir)
-const siyirdiBolgeleri = [
-  { bolge: "Kafa", agirlik: 1 },
-  { bolge: "Gövde", agirlik: 3 },
-  { bolge: "Kol", agirlik: 4 },
-  { bolge: "Bacak", agirlik: 2 }
-];
-
-// Ağırlıklı rastgele seçim fonksiyonu
-function weightedRandom(arr) {
-  const toplamAgirlik = arr.reduce((acc, cur) => acc + cur.agirlik, 0);
-  let rnd = Math.random() * toplamAgirlik;
-  for (const item of arr) {
-    if (rnd < item.agirlik) return item.bolge;
-    rnd -= item.agirlik;
-  }
-  return arr[0].bolge; // default fallback
-}
-
 // Rastgele sayı üret
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -56,12 +29,12 @@ function randomInt(min, max) {
 module.exports = {
   name: "ateş",
   description: "Envanterindeki mermiyle ateş eder, isabet veya kaçırma sonucu alırsın.",
-  usage: ".ates <Mermi tipi>",
+  usage: ".ateş <Mermi tipi>",
   async execute(message, args) {
     const userId = message.author.id;
 
     if (args.length === 0) {
-      return message.reply(`Lütfen ateş etmek istediğin mermi tipini yaz. Örnek: \`.ates Normal Mermi\``);
+      return message.reply(`Lütfen ateş etmek istediğin mermi tipini yaz. Örnek: \`.ateş Normal Mermi\``);
     }
 
     const mermi = args.join(" ").trim();
@@ -71,43 +44,59 @@ module.exports = {
       return message.reply(`Geçersiz mermi tipi. Geçerli mermiler: ${Object.keys(mermilerFiyatVeEtki).join(", ")}`);
     }
 
+    // Envanteri çek
     let envanter = await Inventory.findOne({ userId });
-    if (!envanter) {
-      return message.reply("Envanterin bulunamadı.");
+    if (!envanter || !envanter.items || envanter.items.length === 0) {
+      return message.reply("Envanterin bulunamadı veya boş.");
     }
 
-    const envanterItemIndex = envanter.items.findIndex(item => item.toLowerCase().trim() === mermiLower);
+    // Mermiyi bul (items dizisi objelerden oluşuyor diye varsayıyoruz)
+    const envanterItemIndex = envanter.items.findIndex(i => i.name.toLowerCase().trim() === mermiLower);
     if (envanterItemIndex === -1) {
       return message.reply(`Envanterinde **${mermi}** bulunmuyor.`);
     }
 
+    // Statları çek, yoksa odak 0 al
     const statVerisi = await Stats.findById(userId);
-    const odakStat = statVerisi ? statVerisi.odak ?? 0 : 0;
+    const odakStat = statVerisi?.odak ?? 0;
+    const oranlar = atesOranlari[odakStat] || atesOranlari[0];
 
-    const oranlar = atesOranlari[odakStat];
-
+    // Olasılık dizisi hazırla
     let olaslikDizisi = [];
     for (let i = 0; i < oranlar.isabet; i++) olaslikDizisi.push("isabet");
     for (let i = 0; i < oranlar.siyirdi; i++) olaslikDizisi.push("siyirdi");
     for (let i = 0; i < oranlar.kacirdi; i++) olaslikDizisi.push("kacirdi");
 
+    // Rastgele sonucu al
     const sonuc = olaslikDizisi[randomInt(0, olaslikDizisi.length - 1)];
 
-    envanter.items.splice(envanterItemIndex, 1);
+    // Mermiyi envanterden çıkar
+    if (envanter.items[envanterItemIndex].quantity > 1) {
+      envanter.items[envanterItemIndex].quantity -= 1;
+    } else {
+      envanter.items.splice(envanterItemIndex, 1);
+    }
     await envanter.save();
 
-    let mesaj = "";
+    // Mesaj oluştur
+    let mesaj;
+    let renk = "#FF0000";
 
     if (sonuc === "isabet") {
-      const vurulanBolge = weightedRandom(isabetBolgeleri);
-      mesaj = `🎯 **${mermi}** ile ateş ettin ve **isabet** ettin! Vurulan bölge: **${vurulanBolge}**.`;
+      mesaj = `🎯 **${mermi}** ile ateş ettin ve **isabet** ettin!`;
+      renk = "#00FF00";
     } else if (sonuc === "siyirdi") {
-      const siyirdiBolge = weightedRandom(siyirdiBolgeleri);
-      mesaj = `⚡ **${mermi}** ile ateş ettin, **sıyırdı** ama isabet etmedi. Sıyırdığı bölge: **${siyirdiBolge}**.`;
+      mesaj = `⚡ **${mermi}** ile ateş ettin, **sıyırdı** ama isabet etmedi.`;
+      renk = "#FFFF00";
     } else {
       mesaj = `❌ **${mermi}** ile ateş ettin ama **kaçırdın**.`;
     }
 
-    return message.reply(mesaj);
+    const embed = new MessageEmbed()
+      .setTitle("Ateş Sonucu")
+      .setDescription(mesaj)
+      .setColor(renk);
+
+    return message.channel.send({ embeds: [embed] });
   }
 };
