@@ -190,25 +190,25 @@ async function calculateLevelAndReward(userId, client, notificationChannelId) {
     let wordData = await Words.findById(userId);
 
     if (!wordData) {
-      wordData = new Words({ _id: userId });
+      wordData = new Words({ _id: userId, words: 0, lastLevel: 0 });
     }
 
-    const oldLevel = Math.floor(wordData.words / 1000);
-    const newLevel = Math.floor(wordData.words / 1000);
+    const currentLevel = Math.floor(wordData.words / 1000);
 
-    // Şu an seviyeler eşitse, ödül vermeye gerek yok
-    if (newLevel > oldLevel) {
+    if (currentLevel > (wordData.lastLevel || 0)) {
       const reward = 3000;
 
       await addBalance(userId, reward);
 
+      // Güncel seviyeyi kaydet
+      wordData.lastLevel = currentLevel;
       await wordData.save();
 
       const channel = client.channels.cache.get(notificationChannelId);
       if (channel) {
         const embed = new MessageEmbed()
           .setTitle('Seviye Atladınız!')
-          .setDescription(`🎉 Tebrikler <@${userId}>! **Seviye ${newLevel}** oldunuz ve **${reward}$** kazandınız!`)
+          .setDescription(`🎉 Tebrikler <@${userId}>! **Seviye ${currentLevel}** oldunuz ve **${reward}$** kazandınız!`)
           .setColor('Gold')
           .setTimestamp();
 
