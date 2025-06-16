@@ -1,11 +1,12 @@
-const { Permissions } = require('discord.js');
+const { PermissionsBitField } = require('discord.js');
 const Salary = require('../models/Salary');
 
 module.exports = {
   name: 'maaş-kes',
-  description: 'Bir kullanıcının maaş alma hakkını engeller.',
+  description: 'Bir kullanıcının maaşını keser.',
+  usage: '.maaş-kes @kullanıcı',
   async execute(message, args) {
-    if (!message.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) {
+    if (!message.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
       return message.reply('Bu komutu kullanmak için yönetici olmalısın.');
     }
 
@@ -14,19 +15,14 @@ module.exports = {
       return message.reply('Lütfen maaşı kesilecek kullanıcıyı etiketle.');
     }
 
-    let salaryData = await Salary.findOne({ userId: user.id });
+    let salaryData = await Salary.findById(user.id);
     if (!salaryData) {
-      salaryData = new Salary({
-        userId: user.id,
-        lastClaim: null,
-        salaryBlocked: true
-      });
-    } else {
-      salaryData.salaryBlocked = true;
+      salaryData = new Salary({ _id: user.id });
     }
 
+    salaryData.salaryBlocked = true;
     await salaryData.save();
 
-    message.reply(`${user.tag} kullanıcısının maaş alma hakkı engellendi.`);
+    message.channel.send(`${user} kullanıcısının maaşı bu hafta için kesildi.`);
   }
 };
