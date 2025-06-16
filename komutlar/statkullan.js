@@ -23,11 +23,19 @@ module.exports = {
       return message.reply("Geçerli bir sayı girmelisin.");
     }
 
-    const statAdlari =  ["Güç", "Direnç", "Odak", "İrade", "Karizma", "Zeka", "Reflex"];
-    const stat = girdiStat.toLowerCase();
+    const statAdlari = {
+      "guc": "guc", "güç": "guc",
+      "direnc": "direnc", "direnç": "direnc",
+      "odak": "odak",
+      "irade": "irade",
+      "karizma": "karizma",
+      "zeka": "zeka", "zekâ": "zeka",
+      "reflex": "reflex", "refleks": "reflex"
+    };
 
-    if (!statAdlari.includes(stat)) {
-      return message.reply(`Geçerli statlar: ${statAdlari.join(", ")}`);
+    const stat = statAdlari[girdiStat.toLowerCase()];
+    if (!stat) {
+      return message.reply(`Geçerli statlar: ${Object.keys(statAdlari).join(", ")}`);
     }
 
     const mevcut = statVerisi[stat] || 0;
