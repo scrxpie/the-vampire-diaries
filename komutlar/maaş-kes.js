@@ -1,12 +1,11 @@
-const { PermissionsBitField } = require('discord.js');
+const { Permissions } = require('discord.js');
 const Salary = require('../models/Salary');
 
 module.exports = {
   name: 'maaş-kes',
   description: 'Bir kullanıcının maaş alma hakkını engeller.',
   async execute(message, args) {
-    // Yetki kontrolü (örneğin, yönetici olabilir)
-    if (!message.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
+    if (!message.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) {
       return message.reply('Bu komutu kullanmak için yönetici olmalısın.');
     }
 
@@ -17,7 +16,6 @@ module.exports = {
 
     let salaryData = await Salary.findOne({ userId: user.id });
     if (!salaryData) {
-      // Kullanıcıya ait kayıt yoksa yeni oluşturup engelle
       salaryData = new Salary({
         userId: user.id,
         lastClaim: null,
