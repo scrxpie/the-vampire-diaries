@@ -1,143 +1,153 @@
-const Balance = require('../models/Balance');
-const Inventory = require('../models/Inventory');
 const { MessageEmbed } = require('discord.js');
+const Balance = require('../../models/Balance');
+const Inventory = require('../../models/Inventory');
 
 module.exports = {
     name: 'satınal',
     description: 'Belirtilen ürünü satın alırsınız.',
-    usage: '.satınal <ürün adı> [adet]',
+    usage: '.satınal <ürün adı> <miktar>',
     async execute(message, args) {
-        const itemCountArg = args[args.length - 1];
-        let count = 1;
-        let itemName;
-
-        if (!isNaN(itemCountArg)) {
-            count = parseInt(itemCountArg);
-            itemName = args.slice(0, -1).join(' ');
-        } else {
-            itemName = args.join(' ');
+        // Miktar argümanını al, yoksa 1 olsun
+        const amountArg = args[args.length - 1];
+        let amount = 1;
+        if (!isNaN(amountArg)) {
+            amount = Math.max(1, Math.min(parseInt(amountArg), 99));
+            args.pop();
         }
 
+        const itemName = args.join(' ');
         if (!itemName) {
-            return message.reply(" Satın almak istediğin ürünün adını yazmalısın. Örnek: `.satınal Spor Araba 2`");
+            const embed = new MessageEmbed()
+                .setTitle('Hata')
+                .setDescription(" Satın almak istediğin ürünün adını yazmalısın. Örnek: `.satınal Spor Araba 2`")
+                .setColor('#FF0000');
+            return message.channel.send({ embeds: [embed] });
         }
 
-        // Tüm mağaza ürünleri
+        // Orijinal ürünler fiyatları ile
         const items = [
-            "Eski Model Araba - 20000$",
-            "Standart Araba - 30000$",
-            "Motosiklet - 18000$",
-            "Spor Araba - 45000$",
-            "1+0 Apartman - 50000$",
-            "1+1 Apartman - 60000$",
-            "2+1 Apartman - 70000$",
-            "3+1 Apartman - 80000$",
-            "Müstakil Ev - 100000$",
-            "Dublex Ev - 150000$",
-            "Orman Evi - 125000$",
-            "Dağ Evi - 100000$",
-            "Villa - 200000$",
-            "Normal Mermi - 500$",
-            "Gümüş Mermi - 7500$",
-            "Sarı Kurtboğanlı Mermi - 7500$",
-            "Kurtboğanlı Mermi - 7500$",
-            "Ok - 500$",
-            "Elektrikli Şok Cihazı - 5000$",
-            "Kurşun Tuzakları - 2500$",
-            "Zincirler - 1500$",
-            "Işıklı Tuzak - 2500$",
-            "Banshee Günlüğü - 5000$",
-            "Bestiary - 8000$",
-            "Druid Ritüel Kitabı - 10000$",
-            "Triskelion - 12000$",
-            "Kurtboğanlı İğne - 3000$",
-            "Zayıf Noktalar Kitabı - 15000$",
-            "Dağ Külü (5 kişilik) - 10000$",
-            "Kurtboğan - 1500$",
-            "Sarı Kurtboğan - 1500$",
-            "Kurtboğanlı Gaz Bombası - 7500$",
-            "Tabanca - 10000$",
-            "Yay - 30000$",
-            "Arbalet - 30000$",
-            "Kılıç/Katana - 12000$",
-            "Tüfek - 40000$",
-            "Pompalı Tüfek - 40000$",
-            "Makineli - 50000$",
-            "Gün Işığı Takıları - 1000$",
-            "Ay Işığı Takıları - 2000$",
-            "Gilbert Yüzüğü - 2500$"
+            { name: "Eski Model Araba", price: 20000 },
+            { name: "Standart Araba", price: 30000 },
+            { name: "Motosiklet", price: 18000 },
+            { name: "Spor Araba", price: 45000 },
+
+            { name: "1+0 Apartman", price: 50000 },
+            { name: "1+1 Apartman", price: 60000 },
+            { name: "2+1 Apartman", price: 70000 },
+            { name: "3+1 Apartman", price: 80000 },
+            { name: "Müstakil Ev", price: 100000 },
+            { name: "Dublex Ev", price: 150000 },
+            { name: "Orman Evi", price: 125000 },
+            { name: "Dağ Evi", price: 100000 },
+            { name: "Villa", price: 200000 },
+
+            { name: "Normal Mermi", price: 500 },
+            { name: "Gümüş Mermi", price: 7500 },
+            { name: "Sarı Kurtboğanlı Mermi", price: 7500 },
+            { name: "Kurtboğanlı Mermi", price: 7500 },
+            { name: "Ok", price: 500 },
+
+            { name: "Elektrikli Şok Cihazı", price: 5000 },
+            { name: "Kurşun Tuzakları", price: 2500 },
+            { name: "Zincirler", price: 1500 },
+            { name: "Işıklı Tuzak", price: 2500 },
+
+            { name: "Banshee Günlüğü", price: 5000 },
+            { name: "Bestiary", price: 8000 },
+            { name: "Druid Ritüel Kitabı", price: 10000 },
+            { name: "Triskelion", price: 12000 },
+            { name: "Kurtboğanlı İğne", price: 3000 },
+            { name: "Zayıf Noktalar Kitabı", price: 15000 },
+            { name: "Dağ Külü (5 kişilik)", price: 10000 },
+            { name: "Kurtboğan", price: 1500 },
+            { name: "Sarı Kurtboğan", price: 1500 },
+            { name: "Kurtboğanlı Gaz Bombası", price: 7500 },
+
+            { name: "Tabanca", price: 10000 },
+            { name: "Yay", price: 30000 },
+            { name: "Arbalet", price: 30000 },
+            { name: "Kılıç/Katana", price: 12000 },
+            { name: "Tüfek", price: 40000 },
+            { name: "Pompalı Tüfek", price: 40000 },
+            { name: "Makineli", price: 50000 },
+
+            { name: "Gün Işığı Takıları", price: 1000 },
+            { name: "Ay Işığı Takıları", price: 2000 },
+            { name: "Gilbert Yüzüğü", price: 2500 }
         ];
 
-        const foundItem = items.find(item => item.toLowerCase().startsWith(itemName.toLowerCase()));
+        const foundItem = items.find(item => item.name.toLowerCase() === itemName.toLowerCase());
         if (!foundItem) {
             const embed = new MessageEmbed()
-                .setTitle("❌ Ürün Bulunamadı")
-                .setDescription("Böyle bir ürün bulunamadı. Lütfen `.mağaza` komutuyla ürünleri kontrol et.")
-                .setColor("#FF0000");
-            return message.reply({ embeds: [embed] });
+                .setTitle('Ürün Bulunamadı')
+                .setDescription("❌ Böyle bir ürün bulunamadı. Lütfen `.mağaza` komutuyla ürünleri kontrol et.")
+                .setColor('#FF0000');
+            return message.channel.send({ embeds: [embed] });
         }
 
-        const priceMatch = foundItem.match(/- (\d+)\$/);
-        if (!priceMatch) {
-            const embed = new MessageEmbed()
-                .setTitle("❌ Hata")
-                .setDescription("Ürünün fiyatı okunamadı. Lütfen yöneticilere bildir.")
-                .setColor("#FF0000");
-            return message.reply({ embeds: [embed] });
-        }
+        const price = foundItem.price;
+        const pureName = foundItem.name;
 
-        const price = parseInt(priceMatch[1]);
-        const pureName = foundItem.split(' - ')[0];
-
+        // Kullanıcı bakiyesi
         let userBalance = await Balance.findById(message.author.id);
         if (!userBalance) {
             const embed = new MessageEmbed()
-                .setTitle("❌ Bakiye Yok")
-                .setDescription("Henüz bir bakiyen yok. Para kazanmak için görev yap veya maaş al.")
-                .setColor("#FF0000");
-            return message.reply({ embeds: [embed] });
+                .setTitle('Bakiye Yok')
+                .setDescription("❌ Henüz bir bakiyen yok.")
+                .setColor('#FF0000');
+            return message.channel.send({ embeds: [embed] });
         }
 
-        const totalPrice = price * count;
-
+        const totalPrice = price * amount;
         if (userBalance.balance < totalPrice) {
             const embed = new MessageEmbed()
-                .setTitle(" Yetersiz Bakiye")
-                .setDescription(`Bu ürünü **${count}** adet almak için yeterli paran yok.\nGerekli: **${totalPrice}$**, Senin bakiyen: **${userBalance.balance}$**`)
-                .setColor("#FF0000");
-            return message.reply({ embeds: [embed] });
+                .setTitle('Yetersiz Bakiye')
+                .setDescription(` Bu ürünü almak için yeterli paran yok. Gerekli: **${totalPrice}$** (Adet: ${amount}), Senin bakiyen: **${userBalance.balance}$**`)
+                .setColor('#FF0000');
+            return message.channel.send({ embeds: [embed] });
         }
 
+        // Para düş
         userBalance.balance -= totalPrice;
         await userBalance.save();
 
+        // Envantere ekle (5x Spor Araba şeklinde tutacağız)
         let userInventory = await Inventory.findOne({ userId: message.author.id });
         if (!userInventory) {
-            userInventory = new Inventory({ userId: message.author.id, items: [`${count}x ${pureName}`] });
+            userInventory = new Inventory({ userId: message.author.id, items: [`${amount}x ${pureName}`] });
         } else {
-            // Eğer envanterde aynı ürün varsa sayıyı artır
-            let foundIndex = userInventory.items.findIndex(i => i.toLowerCase().includes(pureName.toLowerCase()));
-            if (foundIndex !== -1) {
-                // Örneğin: "2x Spor Araba" -> önceki sayıyı bulup artırıyoruz
-                const oldEntry = userInventory.items[foundIndex];
-                const matchCount = oldEntry.match(/^(\d+)x (.+)$/i);
-                if (matchCount) {
-                    let oldCount = parseInt(matchCount[1]);
-                    userInventory.items[foundIndex] = `${oldCount + count}x ${pureName}`;
-                } else {
-                    // Eğer format farklıysa direkt yenisini ekle
-                    userInventory.items[foundIndex] = `${count}x ${pureName}`;
+            // Eğer aynı ürün varsa miktarı arttır
+            let foundIndex = -1;
+            for (let i = 0; i < userInventory.items.length; i++) {
+                // items dizisindeki elemanlar "5x Spor Araba" veya "Spor Araba" şeklinde olabilir
+                const item = userInventory.items[i];
+                const regex = /^(\d+)x (.+)$/;
+                const match = item.match(regex);
+                if (match) {
+                    const existingAmount = parseInt(match[1]);
+                    const existingName = match[2];
+                    if (existingName.toLowerCase() === pureName.toLowerCase()) {
+                        userInventory.items[i] = `${existingAmount + amount}x ${pureName}`;
+                        foundIndex = i;
+                        break;
+                    }
+                } else if (item.toLowerCase() === pureName.toLowerCase()) {
+                    // "Spor Araba" şeklindeyse 1 tane varsay ve miktarı arttır
+                    userInventory.items[i] = `${1 + amount}x ${pureName}`;
+                    foundIndex = i;
+                    break;
                 }
-            } else {
-                userInventory.items.push(`${count}x ${pureName}`);
+            }
+            if (foundIndex === -1) {
+                userInventory.items.push(`${amount}x ${pureName}`);
             }
         }
         await userInventory.save();
 
         const embed = new MessageEmbed()
-            .setTitle("✅ Satın Alma Başarılı")
-            .setDescription(`**${pureName}** ürününden **${count}** adet başarıyla satın alındı!\nKalan bakiyen: **${userBalance.balance}$**`)
+            .setTitle("Satın Alma Başarılı")
+            .setDescription(` **${pureName}** adlı üründen **${amount}** adet başarıyla satın alındı.\n Toplam Ödeme: **${totalPrice}$**\n Kalan Bakiye: **${userBalance.balance}$**`)
             .setColor("#00FF00");
-        return message.reply({ embeds: [embed] });
+        return message.channel.send({ embeds: [embed] });
     }
 };
