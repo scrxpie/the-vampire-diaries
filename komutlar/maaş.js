@@ -1,82 +1,84 @@
 const { MessageEmbed } = require('discord.js');
-const moment = require('moment');
-require('moment/locale/tr'); // Türkçe için
-moment.locale('tr');
-
 const Salary = require('../models/Salary');
 const Balance = require('../models/Balance');
 
-const roles = [
-  { id: '1374114798790508754', amount: 12000 }, // Şerif
-  { id: '1374116265958047824', amount: 11000 },
-  { id: '1374116335700807751', amount: 10000 },
-  { id: '1374113121966227659', amount: 9000 },
-  { id: '1374113063086723133', amount: 8000 },
-  { id: '1374113003053781193', amount: 8000 },
-  { id: '1383106137028825088', amount: 7000 },
-  { id: '1374112956824158229', amount: 6000 },
-  { id: '1374112902897995877', amount: 6000 },
-  { id: '1374112849072226385', amount: 5000 },
-  { id: '1383056201104887928', amount: 5000 },
-  { id: '1374112778213916672', amount: 5000 },
-  { id: '1374113182087381112', amount: 5000 },
-  { id: '1374118012751450244', amount: 4500 },
-  { id: '1374112382468624394', amount: 4000 },
-  { id: '1374112495777747039', amount: 4000 },
-  { id: '1374113095038931034', amount: 2500 },
-  { id: '1374112994623099002', amount: 2500 },
-  { id: '1374112644105109564', amount: 3000 },
-  { id: '1374112559954792598', amount: 1000 },
-];
+const roles = {
+  "1374114798790508754": 12000, // Şerif
+  "1374116265958047824": 11000, // Başhekim
+  "1374116335700807751": 10000, // İşletme Sahibi
+  "1374113121966227659": 9000,  // Okul Müdürü
+  "1374113063086723133": 8000,  // Şerif Yardımcısı
+  "1374113003053781193": 8000,  // Polis
+  "1383106137028825088": 7000,  // İşletme Asistanı
+  "1374112956824158229": 6000,  // Doktor/Hemşire
+  "1374112902897995877": 6000,  // Lise Öğretmeni
+  "1374112849072226385": 5000,  // Psikolog
+  "1383056201104887928": 5000,  // Resepsiyon
+  "1374112778213916672": 5000,  // Barmen
+  "1374113182087381112": 5000,  // Garson
+  "1374118012751450244": 4500,  // Veteriner
+  "1374112382468624394": 4000,  // Tamirci
+  "1374112495777747039": 4000,  // Güvenlik
+  "1374113095038931034": 2500,  // Antrenman Asistanı
+  "1374112994623099002": 2500,  // Mağaza Çalışanı
+  "1374112644105109564": 3000,  // Öğrenci
+  "1374112559954792598": 1000   // İşsiz
+};
 
 module.exports = {
   name: 'maaş',
   description: 'Haftalık maaşını alırsın.',
   async execute(message) {
     const userId = message.author.id;
-    const userRoles = message.member.roles.cache;
 
-    let maxSalary = 0;
-    for (const role of roles) {
-      if (userRoles.has(role.id) && role.amount > maxSalary) {
-        maxSalary = role.amount;
-      }
+    const now = Date.now();
+    const oneWeek = 7 * 24 * 60 * 60 * 1000;
+
+    let salaryData = await Salary.findById(userId);
+    if (!salaryData) {
+      salaryData = new Salary({
+        _id: userId,
+        lastClaim: 0,
+        salaryBlocked: false
+      });
     }
 
-    if (maxSalary === 0) {
-      return message.reply('Maaş alabileceğin bir mesleğin yok.');
+    if (salaryData.salaryBlocked) {
+      return message.reply('RolePlay\'de aktif olmadığınız için bu hafta maaş alamazsınız.');
     }
 
-    let salaryData = await Salary.findOne({ userId });
-    const now = new Date();
+    if (now - salaryData.lastClaim < oneWeek) {
+      const remaining = oneWeek - (now - salaryData.lastClaim);
+      const days = Math.floor(remaining / (24 * 60 * 60 * 1000));
+      const hours = Math.floor((remaining % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
+      const minutes = Math.floor((remaining % (60 * 60 * 1000)) / (60 * 1000));
 
-    if (salaryData) {
-      const last = salaryData.lastClaimed || new Date(0);
-      const diff = now - last;
-
-      if (diff < 7 * 24 * 60 * 60 * 1000) {
-        const nextClaim = moment(last).add(7, 'days').calendar();
-        return message.reply(`Zaten maaş aldın. Yeni maaş **${nextClaim}** tarihinde alınabilir.`);
-      }
-
-      salaryData.lastClaimed = now;
-      await salaryData.save();
-    } else {
-      await Salary.create({ userId, lastClaimed: now });
+      return message.reply(`Zaten maaş aldın. Yeni maaşı tekrar almak için **${days} gün, ${hours} saat, ${minutes} dakika** beklemelisin.`);
     }
 
-    // 💰 Bakiye'ye maaşı ekle
+    const member = message.member;
+    const salaryAmount = Object.keys(roles).reduce((acc, roleId) => {
+      return member.roles.cache.has(roleId) ? Math.max(acc, roles[roleId]) : acc;
+    }, 0);
+
+    if (salaryAmount === 0) {
+      return message.reply('Maaş alabileceğiniz bir rolünüz bulunmuyor.');
+    }
+
     await Balance.findByIdAndUpdate(
       userId,
-      { $inc: { balance: maxSalary } },
-      { upsert: true, new: true }
+      { $inc: { balance: salaryAmount } },
+      { upsert: true }
     );
 
+    salaryData.lastClaim = now;
+    await salaryData.save();
+
     const embed = new MessageEmbed()
-     
-      .setTitle('📥 Maaş Alındı')
-      .setDescription(`**${message.author.username}**, haftalık maaşını aldı: **${maxSalary.toLocaleString()}$**`)
-      .setFooter({ text: '༒ | Maaş sistemi' })
+      
+      .setTitle('༒ Maaş Ödendi')
+      .setDescription(`**${salaryAmount} $** maaş hesabınıza yatırıldı.`)
+      .setFooter({ text: '༒ | Haftalık maaş sistemi' })
       .setTimestamp();
 
     message.reply({ embeds: [embed] });
