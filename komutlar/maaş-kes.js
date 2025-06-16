@@ -11,9 +11,9 @@ module.exports = {
     const user = message.mentions.users.first();
     if (!user) return message.reply('Bir kullanıcı etiketlemelisin.');
 
-    await Salary.findByIdAndUpdate(
-      user.id,
-      { salaryBlocked: true },
+    await Salary.updateOne(
+      { _id: user.id },
+      { $set: { salaryBlocked: true } },
       { upsert: true }
     );
 
