@@ -234,29 +234,31 @@ const arcaneRewardTable = {
 };
 
 
-const requireddRoleId = '1327981428805210204'; // Ödül verilecek rolün ID'si
+const requireddRoleId = '1368538991632060436'; // Ödül verilecek rolün ID'si
 // botu seviyesini kontrol et
 client.on('messageCreate', async (message) => {
-  if (message.author.bot) return;
-
-  const userId = message.author.id;
-
-  // Kelime sisteminizde kelime sayımı burada yapılıyor olmalı
-  kelime.messageCreate(message);
-  hkelime.messageCreate(message);
-
-  await calculateLevelAndReward(userId, client, notificationChannelId);
-
   if (message.author.id !== arcaneBotId) return;
   if (!message.content.includes('Yeni levelin')) return;
 
+  // ✅ 1. Kullanıcıyı mesajdan çek
+  const userIdMatch = message.content.match(/<@!?(\d+)>/);
+  const userId = userIdMatch ? userIdMatch[1] : null;
+
+  if (!userId) return;
+
+  const member = await message.guild.members.fetch(userId).catch(() => null);
+  if (!member) return;
+
+  // ❌ Eğer rol kontrolü yapmak istiyorsan:
+  // if (!member.roles.cache.has(requiredRoleId)) return;
+
+  // ✅ 2. Level bilgisini mesajdan çek
   const levelMatch = message.content.match(/Yeni levelin \*\*(\d+)\*\*/i);
   if (!levelMatch) return;
 
   const level = parseInt(levelMatch[1], 10);
-  const member = message.mentions.members.first();
-  if (!member || !member.roles.cache.has(requiredRoleId)) return;
 
+  // ✅ 3. Seviye aralığına göre ödül belirle
   const arcaneRewardTable = {
     '5-10': 200,
     '10-25': 300,
@@ -273,17 +275,18 @@ client.on('messageCreate', async (message) => {
   }
 
   if (reward > 0) {
-    await addBalance(member.id, reward);
+    await addBalance(userId, reward);
 
     const embed = new MessageEmbed()
       .setTitle('Arcane Seviye Ödülü!')
-      .setDescription(`🎉 Tebrikler ${member.user.username}! Arcane'de seviye **${level}** oldunuz ve **${reward}$** kazandınız!`)
+      .setDescription(`Tebrikler <@${userId}>! Arcane'de seviye **${level}** oldun ve **${reward}$** kazandın!`)
       .setColor('#00ff00')
       .setTimestamp();
 
     message.channel.send({ embeds: [embed] });
   }
 });
+
 const fiboBotId = '735147814878969968';
 // fiboBotId'yi tanımlayacağınız yer:
 // Botunuzun ana dosyasının en başında, diğer sabitlerinizle birlikte.
