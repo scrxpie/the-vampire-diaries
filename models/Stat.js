@@ -14,7 +14,7 @@ const statSchema = new mongoose.Schema({
   irade: { type: Number, default: 0 },
   karizma: { type: Number, default: 0 },
   zeka: { type: Number, default: 0 },
-  refleks: { type: Number, default: 0 },
+  reflex : { type: Number, default: 0 },
 });
 
 module.exports = mongoose.model('Stat', statSchema);
