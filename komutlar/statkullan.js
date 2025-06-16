@@ -23,7 +23,7 @@ module.exports = {
       return message.reply("Geçerli bir sayı girmelisin.");
     }
 
-    const statAdlari = ["guc", "direnc", "odak", "irade", "karizma", "zeka", "reflex"];
+    const statAdlari =  ["Güç", "Direnç", "Odak", "İrade", "Karizma", "Zeka", "Reflex"];
     const stat = girdiStat.toLowerCase();
 
     if (!statAdlari.includes(stat)) {
