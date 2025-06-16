@@ -43,9 +43,9 @@ const balanceDataPath = path.join(__dirname, 'data', 'balances.json');
 
 // Ayarlar
 const excludedChannels = ['1327621148606988349','1327625994411970560']; // Hariç tutulacak kanallar
-const requiredRoleId = '1327981428805210204'; // Kelime sayımı için gerekli rol
+const requiredRoleId = '1368538991632060436'; // Kelime sayımı için gerekli rol
 const arcaneBotId = '437808476106784770'; // Arcane botunun ID'si
-const notificationChannelId = '1329572543644041226'; // Para bildirimi yapılacak kanal ID'si
+const notificationChannelId = '1368539004823408719'; // Para bildirimi yapılacak kanal ID'si
 
 // Komut koleksiyonu
 client.commands = new Collection();
@@ -164,72 +164,61 @@ client.on('messageCreate', (message) => {
     }
 });
 // Bakiye ekleme fonksiyonu
-function addBalance(userId, amount) {
-    let balanceData = {};
-    try {
-        if (fs.existsSync(balanceDataPath)) {
-            balanceData = JSON.parse(fs.readFileSync(balanceDataPath, 'utf8'));
-        }
-    } catch (error) {
-        console.error('Bakiye verisi okuma hatası:', error);
+
+    const Balance = require('./models/Balance');
+
+async function addBalance(userId, amount) {
+  try {
+    let balanceData = await Balance.findById(userId);
+
+    if (!balanceData) {
+      balanceData = new Balance({ _id: userId, balance: 0, bank: 0 });
     }
 
-    if (!balanceData[userId]) {
-        balanceData[userId] = { balance: 0 };
-    }
-
-    balanceData[userId].balance += amount;
-
-    try {
-        fs.writeFileSync(balanceDataPath, JSON.stringify(balanceData, null, 2));
-    } catch (error) {
-        console.error('Bakiye verisi yazma hatası:', error);
-    }
+    balanceData.balance += amount;
+    await balanceData.save();
+  } catch (error) {
+    console.error('Bakiye güncellenirken hata oluştu:', error);
+  }
 }
-function calculateLevelAndReward(userId) {
-    let data;
-    try {
-        data = JSON.parse(fs.readFileSync('./data/kelimeVerisi.json', 'utf8'));
-    } catch (error) {
-        console.error('JSON okuma hatası:', error);
-        return;
-    }
-
-    if (!data[userId]) {
-        data[userId] = { words: 0, level: 0 };
-    }
 
     // Eski seviye (kaydedilmiş)
-    const oldLevel = data[userId].level;
+    const Words = require('./models/Words');
 
-    // Yeni seviye: 1000 kelime = 1 seviye
-    const newLevel = Math.floor(data[userId].words / 1000);
+async function calculateLevelAndReward(userId, client, notificationChannelId) {
+  try {
+    let wordData = await Words.findById(userId);
 
-    // Eğer yeni seviye eski seviyeden büyükse ödül ver
-    if (newLevel > oldLevel) {
-        const levelsGained = newLevel - oldLevel;
-        const reward = 3000;
-
-        // Seviyeyi güncelle
-        data[userId].level = newLevel;
-
-        // Bakiye ekle
-        addBalance(userId, reward);
-
-        // JSON'u kaydet
-        fs.writeFileSync('./data/kelimeVerisi.json', JSON.stringify(data, null, 2));
-
-        // Bildirim gönder
-        const notificationChannel = client.channels.cache.get(notificationChannelId);
-        if (notificationChannel) {
-            const embed = new MessageEmbed()
-                .setTitle('Seviye Atladınız!')
-                .setDescription(`🎉 Tebrikler <@${userId}>! **Seviye ${newLevel}** oldunuz ve **${reward}$** kazandınız!`)
-                .setColor('GOLD')
-                .setTimestamp();
-            notificationChannel.send({ content: `<@${userId}>`, embeds: [embed] });
-        }
+    if (!wordData) {
+      wordData = new Words({ _id: userId });
     }
+
+    const oldLevel = Math.floor(wordData.words / 1000);
+    const newLevel = Math.floor(wordData.words / 1000);
+
+    // Şu an seviyeler eşitse, ödül vermeye gerek yok
+    if (newLevel > oldLevel) {
+      const reward = 3000;
+
+      await addBalance(userId, reward);
+
+      await wordData.save();
+
+      const channel = client.channels.cache.get(notificationChannelId);
+      if (channel) {
+        const embed = new MessageEmbed()
+          .setTitle('Seviye Atladınız!')
+          .setDescription(`🎉 Tebrikler <@${userId}>! **Seviye ${newLevel}** oldunuz ve **${reward}$** kazandınız!`)
+          .setColor('Gold')
+          .setTimestamp();
+
+        channel.send({ content: `<@${userId}>`, embeds: [embed] });
+      }
+    }
+  } catch (error) {
+    console.error('Seviye ve ödül hesaplama hatası:', error);
+  }
+}
 }
 
 // Mesaj oluşturulduğunda kelime sayma ve ödül hesaplam
@@ -247,55 +236,53 @@ const arcaneRewardTable = {
 
 const requireddRoleId = '1327981428805210204'; // Ödül verilecek rolün ID'si
 // botu seviyesini kontrol et
-client.on('messageCreate', (message) => {
+client.on('messageCreate', async (message) => {
+  if (message.author.bot) return;
+
+  const userId = message.author.id;
+
+  // Kelime sisteminizde kelime sayımı burada yapılıyor olmalı
   kelime.messageCreate(message);
   hkelime.messageCreate(message);
-  const userId= message.author.id
-    calculateLevelAndReward(userId);
 
-    if (message.author.id !== arcaneBotId) return; // Sadece Arcane botu mesajları
-    if (!message.content.includes('Yeni levelin')) return; // Sadece seviye mesajı
+  await calculateLevelAndReward(userId, client, notificationChannelId);
 
-    // Arcane seviye mesajı yakalama
-    const levelMatch = message.content.match(/Yeni levelin \*\*(\d+)\*\*/i);
-    if (!levelMatch) return;
+  if (message.author.id !== arcaneBotId) return;
+  if (!message.content.includes('Yeni levelin')) return;
 
-    const level = parseInt(levelMatch[1], 10);
-    const member = message.mentions.members.first();
-    if (!member) return;
+  const levelMatch = message.content.match(/Yeni levelin \*\*(\d+)\*\*/i);
+  if (!levelMatch) return;
 
-    // Rol kontrolü
-    if (!member.roles.cache.has(requiredRoleId)) {
-        return; // Eğer kullanıcıda gerekli rol yoksa ödül verilmez
+  const level = parseInt(levelMatch[1], 10);
+  const member = message.mentions.members.first();
+  if (!member || !member.roles.cache.has(requiredRoleId)) return;
+
+  const arcaneRewardTable = {
+    '5-10': 200,
+    '10-25': 300,
+    '25-200': 500,
+  };
+
+  let reward = 0;
+  for (const [range, amount] of Object.entries(arcaneRewardTable)) {
+    const [min, max] = range.split('-').map(Number);
+    if (level >= min && level <= max) {
+      reward = amount;
+      break;
     }
+  }
 
-    // Ödül hesaplama
-    let reward = 0;
-    for (const [range, amount] of Object.entries(arcaneRewardTable)) {
-        const [min, max] = range.split('-').map(Number);
-        if (level >= min && level <= max) {
-            reward = amount;
-            break;
-        }
-    }
+  if (reward > 0) {
+    await addBalance(member.id, reward);
 
-    // Eğer ödül bulunursa bakiye ekle
-    if (reward > 0) {
-        addBalance(member.id, reward);
+    const embed = new MessageEmbed()
+      .setTitle('Arcane Seviye Ödülü!')
+      .setDescription(`🎉 Tebrikler ${member.user.username}! Arcane'de seviye **${level}** oldunuz ve **${reward}$** kazandınız!`)
+      .setColor('Blue')
+      .setTimestamp();
 
-        // Başarı bildirimi gönder
-        const embed = new MessageEmbed()
-            .setTitle('Arcane Seviye Ödülü!')
-            .setDescription(`🎉 Tebrikler ${member.user.username}! Arcane botunda seviye **${level}** oldunuz ve **${reward}$** ödül kazandınız!`)
-            .setColor('BLUE')
-            .setTimestamp();
-
-        message.channel.send({ embeds: [embed] });
-    }
-  
-    // Sprun botunun /bump mesajlarını işleme
-    
-
+    message.channel.send({ embeds: [embed] });
+  }
 });
 const fiboBotId = '735147814878969968';
 // fiboBotId'yi tanımlayacağınız yer:
