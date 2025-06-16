@@ -1,5 +1,5 @@
-const Balance = require('../../models/Balance');
-const Inventory = require('../../models/Inventory');
+const Balance = require('../models/Balance');
+const Inventory = require('../models/Inventory');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = {
@@ -19,7 +19,7 @@ module.exports = {
         }
 
         if (!itemName) {
-            return message.reply("📦 Satın almak istediğin ürünün adını yazmalısın. Örnek: `.satınal Spor Araba 2`");
+            return message.reply(" Satın almak istediğin ürünün adını yazmalısın. Örnek: `.satınal Spor Araba 2`");
         }
 
         // Tüm mağaza ürünleri
@@ -102,7 +102,7 @@ module.exports = {
 
         if (userBalance.balance < totalPrice) {
             const embed = new MessageEmbed()
-                .setTitle("💸 Yetersiz Bakiye")
+                .setTitle(" Yetersiz Bakiye")
                 .setDescription(`Bu ürünü **${count}** adet almak için yeterli paran yok.\nGerekli: **${totalPrice}$**, Senin bakiyen: **${userBalance.balance}$**`)
                 .setColor("#FF0000");
             return message.reply({ embeds: [embed] });
