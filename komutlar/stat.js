@@ -4,7 +4,6 @@ const Stats = require("../models/Stat");
 function statBarYuzde(sayi) {
   const max = 5;
   const totalBlocks = 10;
-
   const yuzde = Math.round((sayi / max) * 100);
 
   const doluBlocks = Math.floor((yuzde / 100) * totalBlocks);
@@ -25,14 +24,11 @@ module.exports = {
     const userId = message.author.id;
 
     const statVerisi = await Stats.findById(userId);
-
     if (!statVerisi) {
       return message.reply("Henüz hiç stat hakkın veya stat verin yok. `.statal` komutuyla kelimelerini stata çevirebilirsin.");
     }
 
-    // 🔍 Kullanıcının rolüne göre tür belirleniyor:
     let tur;
-
     if (message.member.roles.cache.some(role => role.name === "Hunter")) {
       tur = "Avcı";
     } else if (message.member.roles.cache.some(role => role.name === "Human")) {
@@ -43,53 +39,55 @@ module.exports = {
 
     const hak = statVerisi.hak ?? 0;
 
-  const statsListesi = {
-  guc: statVerisi.guc ?? 0,
-  direnc: statVerisi.direnc ?? 0,
-  odak: statVerisi.odak ?? 0,
-  irade: statVerisi.irade ?? 0,
-  karizma: statVerisi.karizma ?? 0,
-  zeka: statVerisi.zeka ?? 0,
-  reflex: statVerisi.refleks ?? 0, // dikkat!
-};
+    const statsListesi = {
+      guc: statVerisi.guc ?? 0,
+      direnc: statVerisi.direnc ?? 0,
+      odak: statVerisi.odak ?? 0,
+      irade: statVerisi.irade ?? 0,
+      karizma: statVerisi.karizma ?? 0,
+      zeka: statVerisi.zeka ?? 0,
+      reflex: statVerisi.reflex ?? 0, // doğru alan adı
+    };
 
-const emojiler = {
-  guc: "💪",
-  direnc: "🛡️",
-  odak: "🎯",
-  irade: "🔥",
-  karizma: "👑",
-  zeka: "🧠",
-  reflex: "⚡",
-};
+    const emojiler = {
+      guc: "💪",
+      direnc: "🛡️",
+      odak: "🎯",
+      irade: "🔥",
+      karizma: "👑",
+      zeka: "🧠",
+      reflex: "⚡",
+    };
 
-const turkceIsimler = {
-  guc: "Güç",
-  direnc: "Direnç",
-  odak: "Odak",
-  irade: "İrade",
-  karizma: "Karizma",
-  zeka: "Zeka",
-  reflex: "Refleks",
-};
+    const turkceIsimler = {
+      guc: "Güç",
+      direnc: "Direnç",
+      odak: "Odak",
+      irade: "İrade",
+      karizma: "Karizma",
+      zeka: "Zeka",
+      reflex: "Refleks",
+    };
 
-let statSirasi = [];
+    let statSirasi = [];
+    if (tur === "Avcı") {
+      statSirasi = ["guc", "direnc", "odak", "irade", "karizma", "zeka", "reflex"];
+    } else if (tur === "İnsan") {
+      statSirasi = ["guc", "direnc", "odak", "karizma", "zeka"];
+    }
 
-if (tur === "Avcı") {
-  statSirasi = ["guc", "direnc", "odak", "irade", "karizma", "zeka", "reflex"];
-} else if (tur === "İnsan") {
-  statSirasi = ["guc", "direnc", "odak", "karizma", "zeka"];
-}
+    const embed = new MessageEmbed()
+      .setTitle(`🧬 ${message.author.username} - Stat Bilgilerin`)
+      .setDescription(`Karakter Türü: **${tur}**\n🎁 Kullanılabilir Stat Hakkın: **${hak}**\n\u200b`)
+      .setColor("RANDOM");
 
-for (const stat of statSirasi) {
-  embed.addField(
-    `${emojiler[stat]} ${turkceIsimler[stat]}`,
-    statBarYuzde(statsListesi[stat]),
-    true
-  );
-}
-
-    
+    for (const stat of statSirasi) {
+      embed.addField(
+        `${emojiler[stat]} ${turkceIsimler[stat]}`,
+        statBarYuzde(statsListesi[stat]),
+        true
+      );
+    }
 
     return message.reply({ embeds: [embed] });
   }
