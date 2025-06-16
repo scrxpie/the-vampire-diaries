@@ -6,7 +6,7 @@ const wordSchema = new mongoose.Schema({
   weeklyWords: { type: Number, default: 0 },      // Haftalık kelime sayısı
   dailyWords: { type: Number, default: 0 },       // Günlük kelime sayısı
   longestEmote: { type: Number, default: 0 },     // En uzun RP mesajı (bir mesajda en çok kelime)
-  lastUpdate: { type: Date, default: Date.now }.
+  lastUpdate: { type: Date, default: Date.now },
      lastLevel: { type: Number, default: 0 } // En son güncelleme (günlük/haftalık reset için)
 });
 
