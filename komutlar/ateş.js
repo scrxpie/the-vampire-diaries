@@ -21,7 +21,34 @@ const atesOranlari = {
   5: { isabet: 6, siyirdi: 2, kacirdi: 2 }
 };
 
-// Rastgele sayı üretici
+// İsabet vurulan bölgeler ve ağırlıkları (örnek)
+const isabetBolgeleri = [
+  { bolge: "Kafa", agirlik: 1 },   // %10 ihtimal
+  { bolge: "Gövde", agirlik: 4 }, // %40 ihtimal
+  { bolge: "Kol", agirlik: 3 },    // %30 ihtimal
+  { bolge: "Bacak", agirlik: 2 }   // %20 ihtimal
+];
+
+// Sıyırma bölgeleri ve ağırlıkları (benzer ama biraz farklı olabilir)
+const siyirdiBolgeleri = [
+  { bolge: "Kafa", agirlik: 1 },
+  { bolge: "Gövde", agirlik: 3 },
+  { bolge: "Kol", agirlik: 4 },
+  { bolge: "Bacak", agirlik: 2 }
+];
+
+// Ağırlıklı rastgele seçim fonksiyonu
+function weightedRandom(arr) {
+  const toplamAgirlik = arr.reduce((acc, cur) => acc + cur.agirlik, 0);
+  let rnd = Math.random() * toplamAgirlik;
+  for (const item of arr) {
+    if (rnd < item.agirlik) return item.bolge;
+    rnd -= item.agirlik;
+  }
+  return arr[0].bolge; // default fallback
+}
+
+// Rastgele sayı üret
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -40,87 +67,43 @@ module.exports = {
     const mermi = args.join(" ").trim();
     const mermiLower = mermi.toLowerCase();
 
-    if (!mermilerFiyatVeEtki.hasOwnProperty(mermi)) {
+    if (!mermilerFiyatVeEtki[mermi]) {
       return message.reply(`Geçersiz mermi tipi. Geçerli mermiler: ${Object.keys(mermilerFiyatVeEtki).join(", ")}`);
     }
 
-    // Envanteri çek
     let envanter = await Inventory.findOne({ userId });
     if (!envanter) {
       return message.reply("Envanterin bulunamadı.");
     }
 
-    // Envanterde mermi var mı kontrol et
-    const envanterItemVar = envanter.items.some(item => {
-      const regex = /^(\d+)x (.+)$/i;
-      const match = item.match(regex);
-      if (match) {
-        return match[2].toLowerCase().trim() === mermiLower;
-      } else {
-        return item.toLowerCase().trim() === mermiLower;
-      }
-    });
-
-    if (!envanterItemVar) {
+    const envanterItemIndex = envanter.items.findIndex(item => item.toLowerCase().trim() === mermiLower);
+    if (envanterItemIndex === -1) {
       return message.reply(`Envanterinde **${mermi}** bulunmuyor.`);
     }
 
-    // Statları çek
     const statVerisi = await Stats.findById(userId);
-    if (!statVerisi) {
-      return message.reply("Stat verin bulunamadı.");
-    }
+    const odakStat = statVerisi ? statVerisi.odak ?? 0 : 0;
 
-    const odakStat = statVerisi.odak ?? 0;
     const oranlar = atesOranlari[odakStat];
 
-    // Olasılıkları hazırla
     let olaslikDizisi = [];
     for (let i = 0; i < oranlar.isabet; i++) olaslikDizisi.push("isabet");
     for (let i = 0; i < oranlar.siyirdi; i++) olaslikDizisi.push("siyirdi");
     for (let i = 0; i < oranlar.kacirdi; i++) olaslikDizisi.push("kacirdi");
 
-    // Rastgele sonuç
     const sonuc = olaslikDizisi[randomInt(0, olaslikDizisi.length - 1)];
 
-    // Mermiyi envanterden çıkar (miktar 1'den fazla ise miktarı azalt)
-    const index = envanter.items.findIndex(item => {
-      const regex = /^(\d+)x (.+)$/i;
-      const match = item.match(regex);
-      if (match) {
-        return match[2].toLowerCase().trim() === mermiLower;
-      } else {
-        return item.toLowerCase().trim() === mermiLower;
-      }
-    });
+    envanter.items.splice(envanterItemIndex, 1);
+    await envanter.save();
 
-    if (index > -1) {
-      const item = envanter.items[index];
-      const regex = /^(\d+)x (.+)$/i;
-      const match = item.match(regex);
-      if (match) {
-        let miktar = parseInt(match[1]);
-        let isim = match[2];
-        if (miktar > 1) {
-          miktar--;
-          envanter.items[index] = `${miktar}x ${isim}`;
-        } else {
-          envanter.items.splice(index, 1);
-        }
-      } else {
-        // Miktar bilgisi yoksa direkt çıkar
-        envanter.items.splice(index, 1);
-      }
-      await envanter.save();
-    }
-
-    // Sonuca göre mesaj hazırla
-    let mesaj;
+    let mesaj = "";
 
     if (sonuc === "isabet") {
-      mesaj = `🎯 **${mermi}** ile ateş ettin ve **isabet** ettin!`;
+      const vurulanBolge = weightedRandom(isabetBolgeleri);
+      mesaj = `🎯 **${mermi}** ile ateş ettin ve **isabet** ettin! Vurulan bölge: **${vurulanBolge}**.`;
     } else if (sonuc === "siyirdi") {
-      mesaj = `⚡ **${mermi}** ile ateş ettin, **sıyırdı** ama isabet etmedi.`;
+      const siyirdiBolge = weightedRandom(siyirdiBolgeleri);
+      mesaj = `⚡ **${mermi}** ile ateş ettin, **sıyırdı** ama isabet etmedi. Sıyırdığı bölge: **${siyirdiBolge}**.`;
     } else {
       mesaj = `❌ **${mermi}** ile ateş ettin ama **kaçırdın**.`;
     }
