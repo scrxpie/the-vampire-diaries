@@ -219,7 +219,7 @@ async function calculateLevelAndReward(userId, client, notificationChannelId) {
     console.error('Seviye ve ödül hesaplama hatası:', error);
   }
 }
-}
+
 
 // Mesaj oluşturulduğunda kelime sayma ve ödül hesaplam
 
