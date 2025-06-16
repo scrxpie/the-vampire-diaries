@@ -44,7 +44,7 @@ module.exports = {
     }
 
     if (salaryData.salaryBlocked) {
-      return message.reply('RolePlay\'de aktif olmadığınız için bu hafta maaş alamazsınız.');
+      return message.reply('RolePlay’de aktif olmadığınız için bu hafta maaş alamazsınız.');
     }
 
     if (now - salaryData.lastClaim < oneWeek) {
@@ -75,7 +75,6 @@ module.exports = {
     await salaryData.save();
 
     const embed = new MessageEmbed()
-      
       .setTitle('༒ Maaş Ödendi')
       .setDescription(`**${salaryAmount} $** maaş hesabınıza yatırıldı.`)
       .setFooter({ text: '༒ | Haftalık maaş sistemi' })
