@@ -15,11 +15,17 @@ module.exports = {
     }
 
     let salaryData = await Salary.findById(user.id);
+
     if (!salaryData) {
-      salaryData = new Salary({ _id: user.id });
+      salaryData = new Salary({
+        _id: user.id, // Sadece _id kullan
+        lastClaimed: null,
+        salaryBlocked: true,
+      });
+    } else {
+      salaryData.salaryBlocked = true;
     }
 
-    salaryData.salaryBlocked = true;
     await salaryData.save();
 
     message.channel.send(`${user} kullanıcısının maaşı bu hafta için kesildi.`);
