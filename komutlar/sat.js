@@ -1,92 +1,126 @@
-const fs = require('fs');
-const path = require('path');
+const { MessageEmbed } = require('discord.js');
+const Inventory = require('../models/Inventory');
+const Balance = require('../models/Balance');
 
 module.exports = {
     name: 'sat',
-    description: 'Kendi envanterindeki bir ürünü satarsın.',
+    description: 'Envanterinizdeki bir eşyayı satarsınız.',
+    usage: '.sat <ürün adı> <miktar>',
     async execute(message, args) {
-        // Kullanıcı ve ürün parametrelerini al
-        const ürün = args.slice(0).join(' '); // Ürün adı argüman olarak alınıyor
-
-        if (!ürün) {
-            return message.reply('Lütfen satmak istediğiniz ürünü belirtin. Örnek: `.sat Malikane`');
+        if (args.length < 1) {
+            return message.reply("❌ Lütfen satmak istediğin ürünün adını gir. Örnek: `.sat Spor Araba 1`");
         }
 
-        // Mağaza ürün fiyatları
-        const productPrices = {
-            "Eski Model Araba": 20000,
-            "Standart Araba": 30000,
-            "Motosiklet": 18000,
-            "Spor Araba": 45000,
-            "Müstakil Ev": 20000,
-            "Dublex Ev": 30000,
-            "Orman Evi": 40000,
-            "Dağ Evi": 50000,
-            "Villa": 100000,
-            "Malikane": 500000,
-            "Tabanca": 6000,
-           
-            "Arbalet": 3500,
-           
-           
-          
-            "Gün Işığı Takıları": 1000,
-            "Ay Işığı Takıları": 2000,
-            "Gilbert Yüzüğü": 2500
-        };
-
-        // Kullanıcı dosyasının yolu
-        const envanterFilePath = path.join(__dirname, '..', 'data', 'envanter.json');
-        const balancesFilePath = path.join(__dirname, '..', 'data', 'balances.json');
-
-        // Eğer envanter dosyası yoksa hata mesajı
-        if (!fs.existsSync(envanterFilePath)) {
-            return message.reply('Envanter verisi bulunamadı.');
+        const amountArg = args[args.length - 1];
+        let amount = 1;
+        if (!isNaN(amountArg)) {
+            amount = Math.max(1, Math.min(parseInt(amountArg), 99));
+            args.pop();
         }
 
-        // Kullanıcıların verilerini oku
-        const envanterData = JSON.parse(fs.readFileSync(envanterFilePath, 'utf8'));
-        const balancesData = JSON.parse(fs.readFileSync(balancesFilePath, 'utf8'));
+        const itemName = args.join(' ').toLowerCase();
 
-        const userId = message.author.id;
+        const unsellableItems = [
+            "normal mermi", "gümüş mermi", "sarı kurtboğanlı mermi", "kurtboğanlı mermi", "ok",
+            "tabanca", "yay", "arbalet", "kılıç/katana", "tüfek", "pompalı tüfek", "makineli"
+        ];
 
-        // Kullanıcı verisi yoksa hata mesajı
-        if (!envanterData[userId] || !envanterData[userId].inventory || envanterData[userId].inventory.length === 0) {
-            return message.reply('Envanterinizde ürün bulunmuyor.');
+        if (unsellableItems.includes(itemName)) {
+            const embed = new MessageEmbed()
+                .setTitle("❌ Satılamaz Ürün")
+                .setDescription("Bu ürün satılamaz. Mermi ve silahlar ikinci el olarak satılamaz.")
+                .setColor("#FF0000");
+            return message.channel.send({ embeds: [embed] });
         }
 
-        // Ürünü envanterden güncelle
-        const inventory = envanterData[userId].inventory;
-        const productIndex = inventory.indexOf(ürün);
+        const items = [
+            { name: "Eski Model Araba", price: 20000 },
+            { name: "Standart Araba", price: 30000 },
+            { name: "Motosiklet", price: 18000 },
+            { name: "Spor Araba", price: 45000 },
+            { name: "1+0 Apartman", price: 50000 },
+            { name: "1+1 Apartman", price: 60000 },
+            { name: "2+1 Apartman", price: 70000 },
+            { name: "3+1 Apartman", price: 80000 },
+            { name: "Müstakil Ev", price: 100000 },
+            { name: "Dublex Ev", price: 150000 },
+            { name: "Orman Evi", price: 125000 },
+            { name: "Dağ Evi", price: 100000 },
+            { name: "Villa", price: 200000 },
+            { name: "Elektrikli Şok Cihazı", price: 5000 },
+            { name: "Kurşun Tuzakları", price: 2500 },
+            { name: "Zincirler", price: 1500 },
+            { name: "Işıklı Tuzak", price: 2500 },
+            { name: "Banshee Günlüğü", price: 5000 },
+            { name: "Bestiary", price: 8000 },
+            { name: "Druid Ritüel Kitabı", price: 10000 },
+            { name: "Triskelion", price: 12000 },
+            { name: "Kurtboğanlı İğne", price: 3000 },
+            { name: "Zayıf Noktalar Kitabı", price: 15000 },
+            { name: "Dağ Külü (5 kişilik)", price: 10000 },
+            { name: "Kurtboğan", price: 1500 },
+            { name: "Sarı Kurtboğan", price: 1500 },
+            { name: "Kurtboğanlı Gaz Bombası", price: 7500 },
+            { name: "Gün Işığı Takıları", price: 1000 },
+            { name: "Ay Işığı Takıları", price: 2000 },
+            { name: "Gilbert Yüzüğü", price: 2500 }
+        ];
 
-        if (productIndex === -1) {
-            return message.reply('Envanterinizde belirtilen ürün bulunmuyor.');
+        const foundItem = items.find(i => i.name.toLowerCase() === itemName);
+        if (!foundItem) {
+            return message.reply("❌ Bu ürün bulunamadı veya satılamaz.");
         }
 
-        // Ürünü envanterden sil
-        inventory.splice(productIndex, 1);
+        const userInventory = await Inventory.findOne({ userId: message.author.id });
+        if (!userInventory || !userInventory.items || userInventory.items.length === 0) {
+            return message.reply("📦 Envanterin boş.");
+        }
 
-        // Ürün fiyatını al
-        const productPrice = productPrices[ürün] || 0;
-        if (productPrice > 0) {
-            // Kullanıcının bakiyesi yoksa oluştur
-            if (!balancesData[userId]) {
-                balancesData[userId] = { balance: 0 };
+        let itemIndex = -1;
+        for (let i = 0; i < userInventory.items.length; i++) {
+            const item = userInventory.items[i];
+            const regex = /^(\d+)x (.+)$/;
+            const match = item.match(regex);
+            if (match) {
+                const itemAmount = parseInt(match[1]);
+                const itemNameInInventory = match[2];
+                if (itemNameInInventory.toLowerCase() === foundItem.name.toLowerCase()) {
+                    if (itemAmount < amount) {
+                        return message.reply(`❌ Envanterinde sadece **${itemAmount} adet** var.`);
+                    }
+                    if (itemAmount === amount) {
+                        userInventory.items.splice(i, 1); // Tümü sil
+                    } else {
+                        userInventory.items[i] = `${itemAmount - amount}x ${foundItem.name}`;
+                    }
+                    itemIndex = i;
+                    break;
+                }
+            } else if (item.toLowerCase() === foundItem.name.toLowerCase()) {
+                if (amount > 1) {
+                    return message.reply("❌ Bu üründen sadece 1 adet var.");
+                }
+                userInventory.items.splice(i, 1); // Tekil item
+                itemIndex = i;
+                break;
             }
-
-            // Bakiyeyi artır
-            balancesData[userId].balance += productPrice;
         }
 
-        // Veriyi kaydet
-        try {
-            fs.writeFileSync(envanterFilePath, JSON.stringify(envanterData, null, 2));
-            fs.writeFileSync(balancesFilePath, JSON.stringify(balancesData, null, 2));
-
-            message.reply(`Ürününüz (${ürün}) satıldı ve ${productPrice}$ bakiyenize eklendi.`);
-        } catch (err) {
-            console.error(err);
-            return message.reply('Bir hata oluştu, ürün satılamadı.');
+        if (itemIndex === -1) {
+            return message.reply("❌ Bu ürün envanterinde bulunmuyor.");
         }
+
+        await userInventory.save();
+
+        const moneyToAdd = Math.floor((foundItem.price / 2) * amount);
+        const balance = await Balance.findById(message.author.id);
+        balance.balance += moneyToAdd;
+        await balance.save();
+
+        const embed = new MessageEmbed()
+            .setTitle("🛒 Satış Başarılı")
+            .setDescription(`✔️ **${foundItem.name}** adlı üründen **${amount} adet** başarıyla satıldı.\n💵 Kazanılan Para: **${moneyToAdd}$**\n🪙 Güncel Bakiye: **${balance.balance}$**`)
+            .setColor("#00AAFF");
+        return message.channel.send({ embeds: [embed] });
     }
 };
