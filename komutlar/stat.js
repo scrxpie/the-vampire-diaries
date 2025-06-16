@@ -43,43 +43,53 @@ module.exports = {
 
     const hak = statVerisi.hak ?? 0;
 
-    const statsListesi = {
-      Güc: statVerisi.guc ?? 0,
-      Direnç : statVerisi.direnc ?? 0,
-      Odak: statVerisi.odak ?? 0,
-      İrade : statVerisi.irade ?? 0,
-      Karizma: statVerisi.karizma ?? 0,
-      Zeka: statVerisi.zeka ?? 0,
-      Reflex : statVerisi.reflex ?? 0,
-    };
+  const statsListesi = {
+  guc: statVerisi.guc ?? 0,
+  direnc: statVerisi.direnc ?? 0,
+  odak: statVerisi.odak ?? 0,
+  irade: statVerisi.irade ?? 0,
+  karizma: statVerisi.karizma ?? 0,
+  zeka: statVerisi.zeka ?? 0,
+  reflex: statVerisi.refleks ?? 0, // dikkat!
+};
 
-    const emojiler = {
-      Güc: "💪",
-      Direnç: "🛡️",
-      Odak: "🎯",
-      İrade: "🔥",
-      Karizma: "👑",
-      Zeka: "🧠",
-      Reflex: "⚡",
-    };
+const emojiler = {
+  guc: "💪",
+  direnc: "🛡️",
+  odak: "🎯",
+  irade: "🔥",
+  karizma: "👑",
+  zeka: "🧠",
+  reflex: "⚡",
+};
 
-    const embed = new MessageEmbed()
-      
-      .setTitle(`🧬 ${message.author.username} - Stat Bilgilerin`)
-      .setDescription(`Karakter Türü: **${tur}**\n🎁 Kullanılabilir Stat Hakkın: **${hak}**\n\u200b`);
+const turkceIsimler = {
+  guc: "Güç",
+  direnc: "Direnç",
+  odak: "Odak",
+  irade: "İrade",
+  karizma: "Karizma",
+  zeka: "Zeka",
+  reflex: "Refleks",
+};
 
-    let statSirasi = [];
+let statSirasi = [];
 
-    if (tur === "Avcı") {
-      statSirasi = ["Güç", "Direnç", "Odak", "İrade", "Karizma", "Zeka", "Reflex"];
-    } else if (tur === "İnsan") {
-      statSirasi = ["Güç", "Direnç", "Odak",  "Karizma", "Zeka"];
-    }
+if (tur === "Avcı") {
+  statSirasi = ["guc", "direnc", "odak", "irade", "karizma", "zeka", "reflex"];
+} else if (tur === "İnsan") {
+  statSirasi = ["guc", "direnc", "odak", "karizma", "zeka"];
+}
 
-    for (const stat of statSirasi) {
-      const isim = stat.charAt(0).toUpperCase() + stat.slice(1);
-      embed.addField(`${emojiler[stat]} ${isim}`, statBarYuzde(statsListesi[stat]), true);
-    }
+for (const stat of statSirasi) {
+  embed.addField(
+    `${emojiler[stat]} ${turkceIsimler[stat]}`,
+    statBarYuzde(statsListesi[stat]),
+    true
+  );
+}
+
+    
 
     return message.reply({ embeds: [embed] });
   }
