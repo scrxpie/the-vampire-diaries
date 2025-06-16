@@ -30,25 +30,27 @@ module.exports = {
   description: 'Haftalık maaşını alırsın.',
   async execute(message) {
     const userId = message.author.id;
-
     const now = Date.now();
     const oneWeek = 7 * 24 * 60 * 60 * 1000;
 
-    let salaryData = await Salary.findById(userId);
+    // Maaş verisini bul ya da yeni oluştur
+    let salaryData = await Salary.findOne({ userId });
     if (!salaryData) {
       salaryData = new Salary({
-        _id: userId,
-        lastClaim: 0,
+        userId,
+        lastClaim: null,
         salaryBlocked: false
       });
+      await salaryData.save();
     }
 
     if (salaryData.salaryBlocked) {
       return message.reply('RolePlay’de aktif olmadığınız için bu hafta maaş alamazsınız.');
     }
 
-    if (now - salaryData.lastClaim < oneWeek) {
-      const remaining = oneWeek - (now - salaryData.lastClaim);
+    const lastClaim = salaryData.lastClaim ? salaryData.lastClaim.getTime() : 0;
+    if (now - lastClaim < oneWeek) {
+      const remaining = oneWeek - (now - lastClaim);
       const days = Math.floor(remaining / (24 * 60 * 60 * 1000));
       const hours = Math.floor((remaining % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
       const minutes = Math.floor((remaining % (60 * 60 * 1000)) / (60 * 1000));
@@ -57,21 +59,22 @@ module.exports = {
     }
 
     const member = message.member;
-    const salaryAmount = Object.keys(roles).reduce((acc, roleId) => {
-      return member.roles.cache.has(roleId) ? Math.max(acc, roles[roleId]) : acc;
+    const salaryAmount = Object.keys(roles).reduce((maxSalary, roleId) => {
+      return member.roles.cache.has(roleId) ? Math.max(maxSalary, roles[roleId]) : maxSalary;
     }, 0);
 
     if (salaryAmount === 0) {
       return message.reply('Maaş alabileceğiniz bir rolünüz bulunmuyor.');
     }
 
-    await Balance.findByIdAndUpdate(
-      userId,
+    // Kullanıcının bakiyesini güncelle
+    await Balance.findOneAndUpdate(
+      { userId },
       { $inc: { balance: salaryAmount } },
       { upsert: true }
     );
 
-    salaryData.lastClaim = now;
+    salaryData.lastClaim = new Date();
     await salaryData.save();
 
     const embed = new MessageEmbed()
