@@ -43,7 +43,7 @@ module.exports = {
 
             { name: "Normal Mermi", price: 500 },
             { name: "Gümüş Mermi", price: 7500 },
-            { name: "Sarı Kurtboğanlı Mermi", price: 7500 },
+            { name: "Sarı Kurtboğanlı Mermi", price: 70000 },
             { name: "Kurtboğanlı Mermi", price: 7500 },
             { name: "Ok", price: 500 },
 
@@ -58,9 +58,9 @@ module.exports = {
             { name: "Triskelion", price: 12000 },
             { name: "Kurtboğanlı İğne", price: 3000 },
             { name: "Zayıf Noktalar Kitabı", price: 15000 },
-            { name: "Dağ Külü (5 kişilik)", price: 10000 },
+            { name: "Üvez Tozu", price: 10000 },
             { name: "Kurtboğan", price: 1500 },
-            { name: "Sarı Kurtboğan", price: 1500 },
+            { name: "Sarı Kurtboğan", price: 50000 },
             { name: "Kurtboğanlı Gaz Bombası", price: 7500 },
 
             { name: "Tabanca", price: 10000 },
