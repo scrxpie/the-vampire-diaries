@@ -44,23 +44,23 @@ module.exports = {
     const hak = statVerisi.hak ?? 0;
 
     const statsListesi = {
-      guc: statVerisi.guc ?? 0,
-      direnc: statVerisi.direnc ?? 0,
-      odak: statVerisi.odak ?? 0,
-      irade: statVerisi.irade ?? 0,
-      karizma: statVerisi.karizma ?? 0,
-      zeka: statVerisi.zeka ?? 0,
-      reflex: statVerisi.reflex ?? 0,
+      Güc: statVerisi.guc ?? 0,
+      Direnç : statVerisi.direnc ?? 0,
+      Odak: statVerisi.odak ?? 0,
+      İrade : statVerisi.irade ?? 0,
+      Karizma: statVerisi.karizma ?? 0,
+      Zeka: statVerisi.zeka ?? 0,
+      Reflex : statVerisi.reflex ?? 0,
     };
 
     const emojiler = {
-      guc: "💪",
-      direnc: "🛡️",
-      odak: "🎯",
-      irade: "🔥",
-      karizma: "👑",
-      zeka: "🧠",
-      reflex: "⚡",
+      Güc: "💪",
+      Direnç: "🛡️",
+      Odak: "🎯",
+      İrade: "🔥",
+      Karizma: "👑",
+      Zeka: "🧠",
+      Reflex: "⚡",
     };
 
     const embed = new MessageEmbed()
@@ -71,9 +71,9 @@ module.exports = {
     let statSirasi = [];
 
     if (tur === "Avcı") {
-      statSirasi = ["guc", "direnc", "odak", "irade", "karizma", "zeka", "reflex"];
+      statSirasi = ["Güç", "Direnç", "Odak", "İrade", "Karizma", "Zeka", "Reflex"];
     } else if (tur === "İnsan") {
-      statSirasi = ["guc", "direnc", "odak", "karizma", "zeka"];
+      statSirasi = ["Güç", "Direnç", "Odak",  "Karizma", "Zeka"];
     }
 
     for (const stat of statSirasi) {
