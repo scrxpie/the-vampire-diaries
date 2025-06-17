@@ -1,30 +1,25 @@
-const moment = require('moment-timezone');
-const { getAyEvresi } = require('./dolunay'); // Bu fonksiyon dışa aktarılıyor olmalı
+const { getAyEvresi } = require('./dolunay');
 
-const SES_KANALI_ID = '1383822441750724669'; // Ses kanalının ID'si
+const SES_KANALI_ID = '1383822441750724669'; // Ses kanalınızın ID'si
 
 async function updateVoiceChannelName(client) {
   try {
     const channel = await client.channels.fetch(SES_KANALI_ID);
-
-    // ✅ v13 için doğru kanal tipi kontrolü
     if (!channel || channel.type !== 'GUILD_VOICE') {
-      console.error("Ses kanalı bulunamadı veya tipi GUILD_VOICE değil.");
+      console.error("Ses kanalı bulunamadı veya tip hatası.");
       return;
     }
 
-    const ayDurumu = getAyEvresi(); 
-    const yeniIsim = `🌕 Dolunay %${ayDurumu.ışık}`;
+    const ayDurumu = getAyEvresi();
+    const yeniIsim = `🌙 Ay %${ayDurumu.ışık}`;
 
     if (channel.name !== yeniIsim) {
       await channel.setName(yeniIsim);
-      console.log(`Ses kanalı ismi güncellendi: ${yeniIsim}`);
+      console.log(`Ses kanalı adı güncellendi: ${yeniIsim}`);
     }
   } catch (err) {
     console.error("Ses kanalı adı güncellenirken hata:", err);
   }
 }
 
-module.exports = {
-  updateVoiceChannelName
-};
+module.exports = { updateVoiceChannelName };
