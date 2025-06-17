@@ -118,5 +118,7 @@ module.exports = (client) => {
     }
   }, {
     timezone: "Europe/Istanbul"
+module.exports = { getAyEvresi };
+
   });
 };
