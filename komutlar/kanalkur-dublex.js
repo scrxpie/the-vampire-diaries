@@ -10,7 +10,7 @@ module.exports = {
         }
 
         // Sunucu ID'sini kontrol et
-        const allowedGuildId = '1327541284646293504';  // Verdiğiniz Guild ID
+        const allowedGuildId = '1368538991569272912';  // Verdiğiniz Guild ID
         if (message.guild.id !== allowedGuildId) {
             return message.reply("Bu komut yalnızca belirli bir sunucuda çalışabilir.");
         }
@@ -27,7 +27,7 @@ module.exports = {
         }
 
         // Kategori ID'sini burada girin
-        const kategoriId = '1346125861849530442';  // Verdiğiniz Kategori ID
+        const kategoriId = '1384570574902263818';  // Verdiğiniz Kategori ID
         const kategori = message.guild.channels.cache.get(kategoriId);
         if (!kategori) {
             return message.reply("Belirtilen kategori bulunamadı.");
