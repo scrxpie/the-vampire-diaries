@@ -19,6 +19,11 @@ module.exports = {
             return message.reply("Sikilecek kullanıcıyı belirtin!");
         }
 
+        // Kendini banlamayı engelle
+        if (user.id === message.author.id) {
+            return message.reply('Kendini banlayamazsın!');
+        }
+
         if (!user.bannable) {
             return message.reply('Bu kullanıcıyı banlamaya götüm yetmedi.');
         }
