@@ -567,7 +567,7 @@ cron.schedule('*/5 * * * *', () => {
 
 });
 
-const ayPanoGuncelle = require('./utils/dolunay');
+const {ayPanoGuncelle} = require('./utils/dolunay');
 
 
   ayPanoGuncelle(client);  // cron burada başlayacak
