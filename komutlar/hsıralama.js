@@ -29,6 +29,9 @@ module.exports = {
         });
       }
 
+      // Toplam kelime sayısını hesapla
+      const totalWords = users.reduce((acc, curr) => acc + curr.words, 0);
+
       // İlk 10 kullanıcıyı al
       const topUsers = users.slice(0, 10);
 
@@ -51,7 +54,12 @@ module.exports = {
         .setAuthor({ name: message.guild.name, iconURL: message.guild.iconURL({ dynamic: true }) })
         .setTitle('**༒ Haftalık Kelime Sıralaması**')
         .setDescription(topList.join('\n') || 'Liste boş.')
-        .setFooter({ text: yourRank ? `༒ | Senin haftalık sıran: ${yourRank}. - ${yourWords} kelime` : '༒ | Sıralamada değilsin.' });
+        .addField('Toplam Yazılan Kelime', `\`${totalWords.toLocaleString()}\` kelime`, false)
+        .setFooter({
+          text: yourRank
+            ? `༒ | Senin haftalık sıran: ${yourRank}. - ${yourWords} kelime`
+            : '༒ | Sıralamada değilsin.'
+        });
 
       return message.channel.send({ embeds: [embed] });
 
