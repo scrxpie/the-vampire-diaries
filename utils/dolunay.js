@@ -2,7 +2,7 @@ const { MessageEmbed } = require('discord.js');
 const moment = require('moment-timezone');
 const cron = require('node-cron');
 
-const KANAL_ID = 'KANAL_IDİNİ_YAZ';
+const KANAL_ID = '1383822441750724669';
 
 function getSonrakiCumartesiSaat21(reference) {
   const cumartesi = reference.clone().day(6).hour(21).minute(0).second(0).millisecond(0);
