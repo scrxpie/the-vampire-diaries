@@ -1,15 +1,10 @@
 const { MessageEmbed } = require('discord.js');
 const moment = require('moment-timezone');
-const cron = require('node-cron');
 
-const KANAL_ID = '1383822193087086623';
-let panoMesajId = null;
-
-// Cumartesi saat 21:00 zamanlarını 14 günlük aralıklarla hesapla
 function getSonrakiCumartesiSaat21(reference) {
   const cumartesi = reference.clone().day(6).hour(21).minute(0).second(0).millisecond(0);
   while (cumartesi.isBefore(reference)) {
-    cumartesi.add(14, 'days'); // 14 günlük aralık
+    cumartesi.add(14, 'days');
   }
   return cumartesi;
 }
@@ -17,7 +12,7 @@ function getSonrakiCumartesiSaat21(reference) {
 function getOncekiCumartesiSaat21(reference) {
   const cumartesi = reference.clone().day(6).hour(21).minute(0).second(0).millisecond(0);
   while (cumartesi.isAfter(reference)) {
-    cumartesi.subtract(14, 'days'); // 14 günlük aralık
+    cumartesi.subtract(14, 'days');
   }
   return cumartesi;
 }
@@ -27,8 +22,6 @@ function getAyEvresi() {
 
   const oncekiCumartesi = getOncekiCumartesiSaat21(now);
   const sonrakiCumartesi = getSonrakiCumartesiSaat21(now);
-  
-  // Dolunay 2 gün sürüyor, bu kısmı sabit bırakabiliriz
   const dolunayBitis = oncekiCumartesi.clone().add(2, 'days').hour(23).minute(59).second(59);
 
   let oran;
@@ -71,54 +64,22 @@ function getAyEvresi() {
   };
 }
 
-module.exports = (client) => {
-  cron.schedule('*/5 * * * *', async () => {
-    try {
-      const kanal = await client.channels.fetch(KANAL_ID);
-      if (!kanal || kanal.type !== 'GUILD_TEXT') {
-        console.error('Metin kanalı bulunamadı veya türü uyumsuz.');
-        return;
-      }
+function ayEmbedOlustur() {
+  const ay = getAyEvresi();
+  const simdi = moment().tz("Europe/Istanbul").format("DD MMMM YYYY HH:mm");
 
-      const ay = getAyEvresi();
-      const simdi = moment().tz("Europe/Istanbul").format("DD MMMM YYYY HH:mm");
+  const embed = new MessageEmbed()
+    .setTitle("🌙 Ay Durumu ve Pano Sistemi")
+    .addField("Ay Evresi", ay.yazı, true)
+    .addField("Dolunay Oranı", `%${ay.ışık}`, true)
+    .addField("Süre", ay.kalan, true)
+    .addField("Güncellendi", simdi, false)
+    .setColor("#8e44ad");
 
-      const embed = new MessageEmbed()
-        .setTitle("🌙 Ay Durumu ve Pano Sistemi")
-        .addField("Ay Evresi", ay.yazı, true)
-        .addField("Dolunay Oranı", `%${ay.ışık}`, true)
-        .addField("Süre", ay.kalan, true)
-        .addField("Güncellendi", simdi, false)
-        .setColor("#8e44ad");
+  return { embed, ay };
+}
 
-      if (!panoMesajId) {
-        const mesajlar = await kanal.messages.fetch({ limit: 20 });
-        const onceki = mesajlar.find(m => m.embeds.length && m.embeds[0].title === "🌙 Ay Durumu ve Pano Sistemi");
-
-        if (onceki) {
-          panoMesajId = onceki.id;
-          await onceki.edit({ embeds: [embed] });
-        } else {
-          const gonderilen = await kanal.send({ embeds: [embed] });
-          panoMesajId = gonderilen.id;
-        }
-        return;
-      }
-
-      const eskiMesaj = await kanal.messages.fetch(panoMesajId).catch(() => null);
-      if (eskiMesaj) {
-        await eskiMesaj.edit({ embeds: [embed] });
-      } else {
-        const yeniMesaj = await kanal.send({ embeds: [embed] });
-        panoMesajId = yeniMesaj.id;
-      }
-
-    } catch (err) {
-      console.error('Pano mesajı gönderilirken hata:', err);
-    }
-  }, {
-    timezone: "Europe/Istanbul"
-
-  }); module.exports = { getAyEvresi };
-
+module.exports = {
+  getAyEvresi,
+  ayEmbedOlustur
 };
