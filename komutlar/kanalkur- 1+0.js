@@ -35,24 +35,13 @@ module.exports = {
 
         try {
             // Dublex ana kanalı oluştur
-            const kanalAdi = `『🏡』${evIsmi.replace(/\s+/g, '-').toLowerCase()}-1+0`;  // Kanal adını düzenle
+            const kanalAdi = `『🏡』${evIsmi.replace(/\s+/g, '-').toLowerCase()}-Apartman`;  // Kanal adını düzenle
             const kanal = await message.guild.channels.create(kanalAdi, {
                 type: 'GUILD_TEXT',
                 parent: kategori.id,
             });
 
-            // Alt başlıklar için thread'ler oluştur
-            const altBasliklar = [
-                "Yatak Odası",
-                "Koridor",
-                "Mutfak",
-                "Salon",
-                "Ön Bahçe"
-            ];
-
-            // Thread başlıklarını oluştur
-         
-
+          
             message.reply(`1+0 Apartman başarıyla oluşturuldu: **${evIsmi}**`);
         } catch (error) {
             console.error(error);
