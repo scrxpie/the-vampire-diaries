@@ -27,7 +27,7 @@ module.exports = {
         }
 
         // Kategori ID'sini burada girin
-        const kategoriId = '1384570574902263818';  // Verdiğiniz Kategori ID
+        const kategoriId = '1384569729120735232';  // Verdiğiniz Kategori ID
         const kategori = message.guild.channels.cache.get(kategoriId);
         if (!kategori) {
             return message.reply("Belirtilen kategori bulunamadı.");
@@ -35,7 +35,7 @@ module.exports = {
 
         try {
             // Dublex ana kanalı oluştur
-            const kanalAdi = `『🏡』${evIsmi.replace(/\s+/g, '-').toLowerCase()}-müstakil-evi`;  // Kanal adını düzenle
+            const kanalAdi = `『🏡』${evIsmi.replace(/\s+/g, '-').toLowerCase()}-1+0`;  // Kanal adını düzenle
             const kanal = await message.guild.channels.create(kanalAdi, {
                 type: 'GUILD_TEXT',
                 parent: kategori.id,
