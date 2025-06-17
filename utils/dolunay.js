@@ -1,5 +1,8 @@
 const { MessageEmbed } = require('discord.js');
 const moment = require('moment-timezone');
+const cron = require('node-cron');
+
+const KANAL_ID = 'KANAL_IDİNİ_YAZ';
 
 function getSonrakiCumartesiSaat21(reference) {
   const cumartesi = reference.clone().day(6).hour(21).minute(0).second(0).millisecond(0);
@@ -19,7 +22,6 @@ function getOncekiCumartesiSaat21(reference) {
 
 function getAyEvresi() {
   const now = moment().tz("Europe/Istanbul");
-
   const oncekiCumartesi = getOncekiCumartesiSaat21(now);
   const sonrakiCumartesi = getSonrakiCumartesiSaat21(now);
   const dolunayBitis = oncekiCumartesi.clone().add(2, 'days').hour(23).minute(59).second(59);
@@ -44,7 +46,6 @@ function getAyEvresi() {
   }
 
   oran = Math.max(0, Math.min(100, oran));
-
   let kalanMs = sonrakiCumartesi.diff(now);
   if (kalanMs < 0) kalanMs = 0;
 
@@ -79,7 +80,46 @@ function ayEmbedOlustur() {
   return { embed, ay };
 }
 
+function ayPanoGuncelle(client) {
+  let panoMesajId = null;
+
+  cron.schedule('*/5 * * * *', async () => {
+    try {
+      const kanal = await client.channels.fetch(KANAL_ID);
+      if (!kanal || kanal.type !== 'GUILD_TEXT') return;
+
+      const { embed } = ayEmbedOlustur();
+
+      if (!panoMesajId) {
+        const mesajlar = await kanal.messages.fetch({ limit: 20 });
+        const onceki = mesajlar.find(m => m.embeds.length && m.embeds[0].title === "🌙 Ay Durumu ve Pano Sistemi");
+
+        if (onceki) {
+          panoMesajId = onceki.id;
+          await onceki.edit({ embeds: [embed] });
+        } else {
+          const yeniMesaj = await kanal.send({ embeds: [embed] });
+          panoMesajId = yeniMesaj.id;
+        }
+      } else {
+        const eskiMesaj = await kanal.messages.fetch(panoMesajId).catch(() => null);
+        if (eskiMesaj) {
+          await eskiMesaj.edit({ embeds: [embed] });
+        } else {
+          const yeniMesaj = await kanal.send({ embeds: [embed] });
+          panoMesajId = yeniMesaj.id;
+        }
+      }
+    } catch (err) {
+      console.error("Ay panosu güncellenirken hata:", err);
+    }
+  }, {
+    timezone: "Europe/Istanbul"
+  });
+}
+
 module.exports = {
   getAyEvresi,
-  ayEmbedOlustur
+  ayEmbedOlustur,
+  ayPanoGuncelle
 };
