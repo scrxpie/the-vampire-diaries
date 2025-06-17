@@ -1,6 +1,6 @@
 const { getAyEvresi } = require('./dolunay');
 
-const SES_KANALI_ID = '1383822441750724669'; // Ses kanalınızın ID'si
+const SES_KANALI_ID = '1383822441750724669';
 
 async function updateVoiceChannelName(client) {
   try {
