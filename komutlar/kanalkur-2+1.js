@@ -43,7 +43,7 @@ module.exports = {
             });
 
             // Alt başlıklar için thread'ler oluştur
-            const altBasliklar = ["Oda", "Mutfak", "Salon", "Oda" ];
+            const altBasliklar = ["Oda",  "Oda", "Mutfak", "Salon" ];
 
             for (const baslik of altBasliklar) {
                 const thread = await kanal.threads.create({
