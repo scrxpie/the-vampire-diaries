@@ -1,74 +1,67 @@
-const { Permissions } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 
 module.exports = {
     name: 'kanalkur-dağevi',
-    description: 'Belirtilen türde dublex kanal oluşturur.',
+    description: 'Belirtilen türde dağ evi kanalı oluşturur.',
     async execute(message, args) {
         // Sunucuda olup olmadığını kontrol et
         if (!message.guild) {
             return message.reply("Bu komut yalnızca sunucularda çalışabilir.");
         }
 
-        // Sunucu ID'sini kontrol et
-        const allowedGuildId = '1368538991569272912';  // Verdiğiniz Guild ID
+        // Sadece belirli bir sunucuda çalışması için
+        const allowedGuildId = '1368538991569272912';
         if (message.guild.id !== allowedGuildId) {
             return message.reply("Bu komut yalnızca belirli bir sunucuda çalışabilir.");
         }
 
-        // Kullanıcıda kanal oluşturma izni var mı kontrol et
-        if (!message.member.permissions.has(Permissions.FLAGS.MANAGE_CHANNELS)) {
+        // Kullanıcıda kanal oluşturma yetkisi var mı kontrol et
+        if (!message.member.permissions.has('MANAGE_CHANNELS')) {
             return message.reply("Kanalları yönetme izniniz yok.");
         }
 
-        // Komutla gelen ev sahibi ismini al
+        // Kullanıcının ev ismini belirtip belirtmediğini kontrol et
         const evIsmi = args.join(" ");
         if (!evIsmi) {
             return message.reply("Lütfen geçerli bir ev ismi girin.");
         }
 
-        // Kategori ID'sini burada girin
-        const kategoriId = '1384570189433274499';  // Verdiğiniz Kategori ID
+        // Kategori ID
+        const kategoriId = '1384570189433274499';
         const kategori = message.guild.channels.cache.get(kategoriId);
         if (!kategori) {
             return message.reply("Belirtilen kategori bulunamadı.");
         }
 
         try {
-            // Dublex ana kanalı oluştur
-            const kanalAdi = `『🏡』${evIsmi.replace(/\s+/g, '-').toLowerCase()}-dağ-evi`;  // Kanal adını düzenle
+            // Kanal adı ve açıklama
+            const kanalAdi = `『🏡』${evIsmi.replace(/\s+/g, '-').toLowerCase()}-dağ-evi`;
+
             const kanal = await message.guild.channels.create(kanalAdi, {
                 type: 'GUILD_TEXT',
                 parent: kategori.id,
+                topic: 'Dağ Evi'
             });
 
-            // Alt başlıklar için thread'ler oluştur
+            // Alt başlıklar (threadler)
             const altBasliklar = [
-                "Oda",
-               "Oda",
-                   "Oda",
-                   "Merdiven",
-                "Koridor",
-                "Mutfak",
-                "Salon",
-                "Ön Bahçe",
-                "Arka Bahçe"
-              
+                "Oda", "Oda", "Oda",
+                "Merdiven", "Koridor",
+                "Mutfak", "Salon",
+                "Ön Bahçe", "Arka Bahçe"
             ];
 
-            // Thread başlıklarını oluştur
             for (const baslik of altBasliklar) {
-                // Her başlık için yeni bir thread oluştur
                 const thread = await kanal.threads.create({
-                    name: `${baslik}`,  // Başlık ve kanal adını ekle
-                    autoArchiveDuration: 60, // Thread otomatik kapanma süresi (dakika)
+                    name: baslik,
+                    autoArchiveDuration: 60,
                     reason: `Alt başlık: ${baslik}`,
                 });
 
-                // Thread içine kanal adıyla başlık olarak metin gönder
                 await thread.send(`**${baslik}**`);
             }
 
-            message.reply(Dag evi ve alt başlıklar başarıyla oluşturuldu: **${evIsmi}**`);
+            message.reply(`Dağ evi ve alt başlıklar başarıyla oluşturuldu: **${evIsmi}**`);
         } catch (error) {
             console.error(error);
             message.reply("Bir hata oluştu, lütfen tekrar deneyin.");
