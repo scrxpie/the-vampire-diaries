@@ -39,7 +39,7 @@ module.exports = {
             const kanal = await message.guild.channels.create(kanalAdi, {
                 type: 'GUILD_TEXT',
                 parent: kategori.id,
-                topic: '2+1'  // Kanal açıklaması burada
+                topic: '3+1'  // Kanal açıklaması burada
             });
 
             // Alt başlıklar için thread'ler oluştur
