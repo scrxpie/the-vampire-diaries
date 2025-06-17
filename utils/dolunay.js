@@ -2,16 +2,23 @@ const { MessageEmbed } = require('discord.js');
 const moment = require('moment-timezone');
 const cron = require('node-cron');
 
-// 🔧 AY PANOSU HESAPLAMA FONKSİYONU
+const KANAL_ID = '1383822193087086623';
+let panoMesajId = null;
+
+// Cumartesi saat 21:00 zamanlarını 14 günlük aralıklarla hesapla
 function getSonrakiCumartesiSaat21(reference) {
   const cumartesi = reference.clone().day(6).hour(21).minute(0).second(0).millisecond(0);
-  if (cumartesi.isBefore(reference)) cumartesi.add(7, 'days');
+  while (cumartesi.isBefore(reference)) {
+    cumartesi.add(14, 'days'); // 14 günlük aralık
+  }
   return cumartesi;
 }
 
 function getOncekiCumartesiSaat21(reference) {
   const cumartesi = reference.clone().day(6).hour(21).minute(0).second(0).millisecond(0);
-  if (cumartesi.isAfter(reference)) cumartesi.subtract(7, 'days');
+  while (cumartesi.isAfter(reference)) {
+    cumartesi.subtract(14, 'days'); // 14 günlük aralık
+  }
   return cumartesi;
 }
 
@@ -20,6 +27,8 @@ function getAyEvresi() {
 
   const oncekiCumartesi = getOncekiCumartesiSaat21(now);
   const sonrakiCumartesi = getSonrakiCumartesiSaat21(now);
+  
+  // Dolunay 2 gün sürüyor, bu kısmı sabit bırakabiliriz
   const dolunayBitis = oncekiCumartesi.clone().add(2, 'days').hour(23).minute(59).second(59);
 
   let oran;
@@ -62,43 +71,36 @@ function getAyEvresi() {
   };
 }
 
-// 📤 PANO MESAJI GÖNDERİCİ
-const KANAL_ID = '1383822193087086623'; // 📌 Kanal ID'ni gir
-
-let panoMesajId = null;
-
 module.exports = (client) => {
   cron.schedule('*/5 * * * *', async () => {
     try {
       const kanal = await client.channels.fetch(KANAL_ID);
       if (!kanal || kanal.type !== 'GUILD_TEXT') {
-        console.error('Metin kanalı bulunamadı.');
+        console.error('Metin kanalı bulunamadı veya türü uyumsuz.');
         return;
       }
 
       const ay = getAyEvresi();
-      const şimdi = moment().tz("Europe/Istanbul").format("DD MMMM YYYY HH:mm");
+      const simdi = moment().tz("Europe/Istanbul").format("DD MMMM YYYY HH:mm");
 
       const embed = new MessageEmbed()
-        .setTitle("🌙 Dolunay Durumu ")
+        .setTitle("🌙 Ay Durumu ve Pano Sistemi")
         .addField("Ay Evresi", ay.yazı, true)
         .addField("Dolunay Oranı", `%${ay.ışık}`, true)
         .addField("Süre", ay.kalan, true)
-        .addField("Güncellendi", şimdi, false)
+        .addField("Güncellendi", simdi, false)
         .setColor("#8e44ad");
 
-      // Eğer mesaj daha önce gönderilmediyse gönder
       if (!panoMesajId) {
-        // Eski mesaj var mı diye kontrol et (embed başlığına göre)
-        const mesajlar = await kanal.messages.fetch({ limit: 10 });
-        const önceki = mesajlar.find(m => m.embeds.length && m.embeds[0].title === "🌙 Ay Durumu ve Pano Sistemi");
+        const mesajlar = await kanal.messages.fetch({ limit: 20 });
+        const onceki = mesajlar.find(m => m.embeds.length && m.embeds[0].title === "🌙 Ay Durumu ve Pano Sistemi");
 
-        if (önceki) {
-          panoMesajId = önceki.id;
-          await önceki.edit({ embeds: [embed] });
+        if (onceki) {
+          panoMesajId = onceki.id;
+          await onceki.edit({ embeds: [embed] });
         } else {
-          const gönderilen = await kanal.send({ embeds: [embed] });
-          panoMesajId = gönderilen.id;
+          const gonderilen = await kanal.send({ embeds: [embed] });
+          panoMesajId = gonderilen.id;
         }
         return;
       }
