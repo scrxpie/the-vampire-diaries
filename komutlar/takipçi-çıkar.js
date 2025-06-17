@@ -73,4 +73,4 @@ module.exports.help = {
     name: "takipci-cikar",
     description: "Belirtilen kullanıcıyı takipçilerinizden çıkarır.",
     usage: "!takipci-cikar <@kullanıcıetiketi | instagram_kullanici_adi>",
-};
+}; */
