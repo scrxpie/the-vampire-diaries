@@ -1,10 +1,15 @@
+const kelime = require('../komutlar/kelime');
+const hkelime = require('../komutlar/hkelime');
+
 module.exports = {
   name: 'messageCreate',
+  async execute(message) {
+    if (message.author.bot) return;
 
-  async execute(message, client) {
-    const kelimeKomutu = client.commands.get('kelime');
-    if (kelimeKomutu && typeof kelimeKomutu.messageCreate === 'function') {
-      kelimeKomutu.messageCreate(message);
-    }
+    // Her iki trackWords fonksiyonunu çağır
+    await Promise.all([
+      kelime.messageCreate(message),
+      hkelime.messageCreate(message)
+    ]);
   }
 };
