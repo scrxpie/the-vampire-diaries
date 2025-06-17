@@ -1,72 +1,58 @@
-const { Permissions } = require('discord.js');
-
 module.exports = {
     name: 'kanalkur-müstakil',
-    description: 'Belirtilen türde dublex kanal oluşturur.',
+    description: 'Belirtilen türde müstakil ev kanalı oluşturur.',
     async execute(message, args) {
-        // Sunucuda olup olmadığını kontrol et
         if (!message.guild) {
             return message.reply("Bu komut yalnızca sunucularda çalışabilir.");
         }
 
-        // Sunucu ID'sini kontrol et
-        const allowedGuildId = '1368538991569272912';  // Verdiğiniz Guild ID
+        const allowedGuildId = '1368538991569272912';
         if (message.guild.id !== allowedGuildId) {
             return message.reply("Bu komut yalnızca belirli bir sunucuda çalışabilir.");
         }
 
-        // Kullanıcıda kanal oluşturma izni var mı kontrol et
-        if (!message.member.permissions.has(Permissions.FLAGS.MANAGE_CHANNELS)) {
+        if (!message.member.permissions.has('MANAGE_CHANNELS')) {
             return message.reply("Kanalları yönetme izniniz yok.");
         }
 
-        // Komutla gelen ev sahibi ismini al
         const evIsmi = args.join(" ");
         if (!evIsmi) {
             return message.reply("Lütfen geçerli bir ev ismi girin.");
         }
 
-        // Kategori ID'sini burada girin
-        const kategoriId = '1384570574902263818';  // Verdiğiniz Kategori ID
+        const kategoriId = '1384570574902263818';
         const kategori = message.guild.channels.cache.get(kategoriId);
         if (!kategori) {
             return message.reply("Belirtilen kategori bulunamadı.");
         }
 
         try {
-            // Dublex ana kanalı oluştur
-            const kanalAdi = `『🏡』${evIsmi.replace(/\s+/g, '-').toLowerCase()}-müstakil-evi`;  // Kanal adını düzenle
+            const kanalAdi = `『🏡』${evIsmi.replace(/\s+/g, '-').toLowerCase()}-müstakil-evi`;
+
             const kanal = await message.guild.channels.create(kanalAdi, {
                 type: 'GUILD_TEXT',
                 parent: kategori.id,
+                topic: 'Müstakil Ev'
             });
 
-            // Alt başlıklar için thread'ler oluştur
             const altBasliklar = [
-                "Oda",
-               "Oda",
-                   "Oda",
-                   "Merdiven",
-                "Koridor",
-                "Mutfak",
-                "Salon",
+                "Oda", "Oda", "Oda",
+                "Merdiven", "Koridor",
+                "Mutfak", "Salon",
                 "Ön Bahçe"
             ];
 
-            // Thread başlıklarını oluştur
             for (const baslik of altBasliklar) {
-                // Her başlık için yeni bir thread oluştur
                 const thread = await kanal.threads.create({
-                    name: `${baslik}`,  // Başlık ve kanal adını ekle
-                    autoArchiveDuration: 60, // Thread otomatik kapanma süresi (dakika)
+                    name: baslik,
+                    autoArchiveDuration: 60,
                     reason: `Alt başlık: ${baslik}`,
                 });
 
-                // Thread içine kanal adıyla başlık olarak metin gönder
                 await thread.send(`**${baslik}**`);
             }
 
-            message.reply(Mustakil ev ve alt başlıklar başarıyla oluşturuldu: **${evIsmi}**`);
+            message.reply(`Müstakil ev ve alt başlıklar başarıyla oluşturuldu: **${evIsmi}**`);
         } catch (error) {
             console.error(error);
             message.reply("Bir hata oluştu, lütfen tekrar deneyin.");
