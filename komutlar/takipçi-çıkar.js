@@ -1,4 +1,4 @@
-const kullanicilar = require('../data/kullanicilar.json');
+/* const kullanicilar = require('../data/kullanicilar.json');
 const fs = require('node:fs/promises');
 const path = require('node:path');
 
