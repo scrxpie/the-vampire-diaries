@@ -112,7 +112,7 @@ module.exports = {
 
         await userInventory.save();
 
-        const moneyToAdd = Math.floor((foundItem.price / 2) * amount);
+        const moneyToAdd = Math.floor((foundItem.price / 1) * amount);
         const balance = await Balance.findById(message.author.id);
         balance.balance += moneyToAdd;
         await balance.save();
