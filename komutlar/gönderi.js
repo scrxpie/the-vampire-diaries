@@ -128,4 +128,4 @@ module.exports.help = {
     name: 'paylaş',
     description: 'Yeni bir gönderi paylaşır (isteğe bağlı metin ve fotoğraf/video ekleri veya URL).',
     usage: '.paylaş <metin> [fotoğraf/video URL veya ek]',
-};
+}; */
