@@ -33,7 +33,7 @@ module.exports = {
 
         try {
             // Ana kanal adı
-            const kanalAdi = `『🏡』${evIsmi.replace(/\s+/g, '-').toLowerCase()}-dublex-evi`;
+            const kanalAdi = `『🏡』${evIsmi.replace(/\s+/g, '-').toLowerCase()}-villa`;
 
             // Kanal oluştur
             const kanal = await message.guild.channels.create(kanalAdi, {
