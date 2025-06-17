@@ -1,21 +1,20 @@
 const moment = require('moment-timezone');
-const { getAyEvresi } = require('./dolunay');
+const { getAyEvresi } = require('./dolunay'); // Bu fonksiyon dışa aktarılıyor olmalı
 
 const SES_KANALI_ID = '1383822441750724669'; // Ses kanalının ID'si
 
 async function updateVoiceChannelName(client) {
   try {
     const channel = await client.channels.fetch(SES_KANALI_ID);
-    if (!channel || channel.type !== 'voice') {
-      console.error("Ses kanalı bulunamadı veya tip hatası.");
+
+    // ✅ v13 için doğru kanal tipi kontrolü
+    if (!channel || channel.type !== 'GUILD_VOICE') {
+      console.error("Ses kanalı bulunamadı veya tipi GUILD_VOICE değil.");
       return;
     }
 
-    // getAyEvresi fonksiyonun saat bazlı dolunay yüzdesini içermeli
     const ayDurumu = getAyEvresi(); 
-
-    // ayDurumu.ışık değeri saat bazlı %0-100 arası tam sayı olmalı
-    const yeniIsim = `Dolunay %${ayDurumu.ışık}`; 
+    const yeniIsim = `🌕 Dolunay %${ayDurumu.ışık}`;
 
     if (channel.name !== yeniIsim) {
       await channel.setName(yeniIsim);
