@@ -26,10 +26,10 @@ module.exports = {
 
         // Orijinal ürünler fiyatları ile
         const items = [
-            { name: "Eski Model Araba", price: 20000 },
-            { name: "Standart Araba", price: 30000 },
-            { name: "Motosiklet", price: 18000 },
-            { name: "Spor Araba", price: 45000 },
+            { name: "Eski Model Araba", price: 30000 },
+            { name: "Standart Araba", price: 40000 },
+            { name: "Motosiklet", price: 20000 },
+            { name: "Spor Araba", price: 50000 },
 
             { name: "1+0 Apartman", price: 50000 },
             { name: "1+1 Apartman", price: 60000 },
