@@ -43,8 +43,10 @@ module.exports = {
 
             // Alt başlıklar için thread'ler oluştur
             const altBasliklar = [
-                "Yatak Odası",
-                "Yatak Odası",
+                "Oda",
+               "Oda",
+                   "Oda",
+                   "Merdiven",
                 "Koridor",
                 "Mutfak",
                 "Salon",
@@ -64,7 +66,7 @@ module.exports = {
                 await thread.send(`**${baslik}**`);
             }
 
-            message.reply(`Dublex ev ve alt başlıklar başarıyla oluşturuldu: **${evIsmi}**`);
+            message.reply(Mustakil ev ve alt başlıklar başarıyla oluşturuldu: **${evIsmi}**`);
         } catch (error) {
             console.error(error);
             message.reply("Bir hata oluştu, lütfen tekrar deneyin.");
