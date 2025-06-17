@@ -75,4 +75,4 @@ module.exports.help = {
     name: 'yorum',
     description: 'Belirtilen bir gönderiye yorum yapar.',
     usage: '.yorum <gönderi ID> <yorum metni>',
-};
+}; */
