@@ -27,7 +27,7 @@ module.exports = {
         }
 
         // Kategori ID'sini burada girin
-        const kategoriId = '1384570574902263818';  // Verdiğiniz Kategori ID
+        const kategoriId = '1384570115323854858';  // Verdiğiniz Kategori ID
         const kategori = message.guild.channels.cache.get(kategoriId);
         if (!kategori) {
             return message.reply("Belirtilen kategori bulunamadı.");
