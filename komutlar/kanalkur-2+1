@@ -1,7 +1,7 @@
 const { Permissions } = require('discord.js');
 
 module.exports = {
-    name: 'kanalkur-2+0',
+    name: 'kanalkur-2+1',
     description: 'Belirtilen türde dublex kanal oluşturur.',
     async execute(message, args) {
         // Sunucuda olup olmadığını kontrol et
@@ -35,26 +35,27 @@ module.exports = {
 
         try {
             // Dublex ana kanalı oluştur
-            const kanalAdi = `『🏡』${evIsmi.replace(/\s+/g, '-').toLowerCase()}-2+1`;  // Kanal adını düzenle
+            const kanalAdi = `『🏡』${evIsmi.replace(/\s+/g, '-').toLowerCase()}-Apartmanı`;
             const kanal = await message.guild.channels.create(kanalAdi, {
                 type: 'GUILD_TEXT',
                 parent: kategori.id,
+                topic: '2+1'  // Kanal açıklaması burada
             });
 
             // Alt başlıklar için thread'ler oluştur
-            const altBasliklar = [
-                "Yatak Odası",
-                "Yatak Odası",
-                "Koridor",
-                "Mutfak",
-                "Salon",
-                "Ön Bahçe"
-            ];
+            const altBasliklar = ["Oda", "Mutfak", "Salon", "Oda" ];
 
-            // Thread başlıklarını oluştur
-         
+            for (const baslik of altBasliklar) {
+                const thread = await kanal.threads.create({
+                    name: baslik,
+                    autoArchiveDuration: 60,
+                    reason: `Alt başlık: ${baslik}`,
+                });
 
-            message.reply(`1+0 Apartman başarıyla oluşturuldu: **${evIsmi}**`);
+                await thread.send(`**${baslik}**`);
+            }
+
+            message.reply(`2+1 ve alt başlıklar başarıyla oluşturuldu: **${evIsmi}**`);
         } catch (error) {
             console.error(error);
             message.reply("Bir hata oluştu, lütfen tekrar deneyin.");
