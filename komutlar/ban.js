@@ -6,7 +6,7 @@ module.exports = {
     usage: '<@kullanıcı> [sebep]',
     permissions: ['BAN_MEMBERS'],
     execute: async (message, args) => {
-        const logChannelID = '1331625066642931722'; // Ban loglarının gönderileceği kanalın ID'si
+        const logChannelID = '1368538999362424904'; // Ban loglarının gönderileceği kanalın ID'si
 
         if (!message.member.permissions.has('BAN_MEMBERS')) {
             return message.reply('Bu komutu kullanmak için götünüz yok!');
