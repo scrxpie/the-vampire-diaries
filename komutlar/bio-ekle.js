@@ -23,5 +23,5 @@ module.exports = {
             message.reply('Biyografiniz başarıyla eklendi veya değiştirildi!');
             console.log(`[bio-ekle] ${message.author.tag} adlı kullanıcının biyografisi güncellendi: ${bio}`);
         });
-    },
-};
+    }, 
+}; */
