@@ -1,4 +1,4 @@
-const db = require('../database');
+/* const db = require('../database');
 const { MessageEmbed, MessageAttachment } = require('discord.js');
 const musicIcons = require('../icons.js'); // icons.js dosyasını import ettik
 
