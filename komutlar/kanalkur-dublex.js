@@ -43,9 +43,11 @@ module.exports = {
 
             // Alt başlıklar için thread'ler oluştur
             const altBasliklar = [
-                "Yatak Odası",
-                "Yatak Odası",
-                "Yatak Odası",
+                "Oda",
+                "Oda",
+            "Oda",
+                 "Oda",
+                 "Merdiven",
                 "Koridor",
                 "Mutfak",
                 "Salon",
