@@ -1,4 +1,4 @@
-const db = require('../database');
+/* const db = require('../database');
 const { MessageEmbed } = require('discord.js');
 
 const BILDirim_KANALI_ID = '1368146532842606703'; // Bildirimlerin gideceği kanalın ID'si
