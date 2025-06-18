@@ -234,7 +234,7 @@ const arcaneRewardTable = {
 };
 const trackPartnerMessage = require('./utils/partner');
 
-
+const fiboBotId = '735147814878969968';
 
 const requireddRoleId = '1368538991632060436'; // Ödül verilecek rolün ID'si
 // botu seviyesini kontrol et
@@ -288,43 +288,35 @@ client.on('messageCreate', async (message) => {
 
     message.channel.send({ embeds: [embed] });
   }
+    if (
+    message.author.id === fiboBotId &&
+    message.content.includes('Thx for bumping our Server! We will remind you in 2 hours!')
+  ) {
+    const bumpedUser = message.mentions.users.first();
+    if (bumpedUser) {
+      const rewardAmount = 100;
+
+      await addBalance(bumpedUser.id, rewardAmount);
+
+      const embed = new MessageEmbed()
+        .setTitle('Sunucu Bump Ödülü!')
+        .setDescription(`🎉 Tebrikler ${bumpedUser.username}! Sunucuyu bump'ladığınız için **${rewardAmount}$** ödül kazandınız!`)
+        
+        .setTimestamp();
+
+      message.channel.send({ embeds: [embed] });
+    }
+  }
+});
 });
 
-const fiboBotId = '735147814878969968';
+
 // fiboBotId'yi tanımlayacağınız yer:
 // Botunuzun ana dosyasının en başında, diğer sabitlerinizle birlikte.
                                       // Lütfen bu değeri kendiniz bulun ve buraya yapıştırın.
                                            // (Örn: Bir Fibo mesajına sağ tıklayıp "ID Kopyala")
 
 // client.on('messageCreate', ...)'in içeriği:
-client.on('messageCreate', async (message) => {
-    // Mesajı gönderen Fibo botu değilse veya bir bot ise, veya mesajda "Thanks for bumping our Server!" ifadesi yoksa işlem yapma
-    // Not: Discord.js v13'te mesajda etiketlenen bir kullanıcı varsa, message.author.bot kontrolü hala gerekli olabilir.
-    if (message.author.id !== fiboBotId || message.author.bot || !message.content.includes('Thx for bumping our Server! We will remind you in 2 hours!')) {
-        return;
-    }
-
-    // Mesajda etiketlenen kullanıcıyı bul
-    // Mesajınızdaki <@533727549625204747> gibi bir etiket varsa, bu kısım doğru çalışacaktır.
-    const bumpedUser = message.mentions.users.first();
-
-    // Eğer etiketlenen bir kullanıcı varsa ve bu kullanıcı mesajı atan Fibo botu değilse
-    if (bumpedUser && bumpedUser.id !== fiboBotId) {
-        const rewardAmount = 100; // Verilecek para miktarı
-
-        // Kullanıcıya para ekle
-        addBalance(bumpedUser.id, rewardAmount);
-
-        // Başarı bildirimi gönder
-        const embed = new MessageEmbed()
-            .setTitle('Sunucu Bump Ödülü!')
-            .setDescription(`🎉 Tebrikler ${bumpedUser.username}! Sunucuyu bump'ladığınız için **${rewardAmount}$** ödül kazandınız!`)
-            
-            .setTimestamp();
-
-        message.channel.send({ embeds: [embed] });
-    }
-});
 
 
 module.exports = (client) => {
