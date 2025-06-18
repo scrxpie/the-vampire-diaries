@@ -238,9 +238,8 @@ const fiboBotId = '735147814878969968';
 
 const requireddRoleId = '1368538991632060436'; // Ödül verilecek rolün ID'si
 // botu seviyesini kontrol et
-const { MessageEmbed } = require('discord.js');
-const fiboBotId = '735147814878969968';
-const arcaneBotId = 'ARCADE_BOT_ID_YAZ'; // Arcane bot ID
+
+
 const requireddRoleId = '1368538991632060436';
 
 // messageCreate olayında kontrol
