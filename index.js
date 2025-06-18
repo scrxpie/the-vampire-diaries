@@ -240,7 +240,6 @@ const requireddRoleId = '1368538991632060436'; // Ödül verilecek rolün ID'si
 // botu seviyesini kontrol et
 
 
-const requireddRoleId = '1368538991632060436';
 
 // messageCreate olayında kontrol
 client.on('messageCreate', async (message) => {
