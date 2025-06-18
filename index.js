@@ -232,11 +232,14 @@ const arcaneRewardTable = {
     '10-25': 500,
     '25-200': 1000,
 };
+const trackPartnerMessage = require('./utils/partner');
+
 
 
 const requireddRoleId = '1368538991632060436'; // Ödül verilecek rolün ID'si
 // botu seviyesini kontrol et
 client.on('messageCreate', async (message) => {
+    trackPartnerMessage(message);
   if (message.author.id !== arcaneBotId) return;
   if (!message.content.includes('Yeni levelin')) return;
 
@@ -566,7 +569,12 @@ cron.schedule('*/5 * * * *', () => {
 
 
 });
+const partnerResetScheduler = require('./utils/PartnerReset');
 
+// Bot hazır olduğunda cron sistemi başlasın
+
+    partnerResetScheduler(); // reset sistemi başlatılıyor
+});
 const {ayPanoGuncelle} = require('./utils/dolunay');
 
 
