@@ -574,7 +574,7 @@ const partnerResetScheduler = require('./utils/PartnerReset');
 // Bot hazır olduğunda cron sistemi başlasın
 
     partnerResetScheduler(); // reset sistemi başlatılıyor
-});
+
 const {ayPanoGuncelle} = require('./utils/dolunay');
 
 
