@@ -29,29 +29,24 @@ module.exports = {
   name: 'maaş',
   description: 'Haftalık maaşını alırsın.',
   async execute(message) {
-    // Kullanıcı ID al
     const userId = message.author?.id;
-    if (!userId) {
-      return message.reply('Kullanıcı ID alınamadı, işlem iptal edildi.');
-    }
+    if (!userId) return message.reply('Kullanıcı ID alınamadı.');
 
     const now = Date.now();
-    const oneWeek = 7 * 24 * 60 * 60 * 1000; // 1 hafta milisaniye cinsinden
+    const oneWeek = 7 * 24 * 60 * 60 * 1000;
 
-    // Salary datasını bul veya oluştur
     let salaryData;
     try {
-      salaryData = await Salary.findById(userId);
+      salaryData = await Salary.findOne({ userId });
       if (!salaryData) {
-        salaryData = new Salary({ _id: userId });
+        salaryData = new Salary({ userId });
         await salaryData.save();
       }
-    } catch (error) {
-      console.error('[maaş] Salary verisi alınırken hata:', error);
-      return message.reply('Veritabanından maaş bilgisi alınırken bir hata oluştu.');
+    } catch (err) {
+      console.error('[maaş] Salary verisi alınırken hata:', err);
+      return message.reply('Veritabanı hatası oluştu.');
     }
 
-    // Maaş kesildiyse engelle ve flag kaldır
     if (salaryData.salaryBlocked) {
       salaryData.salaryBlocked = false;
       salaryData.lastClaimed = now;
@@ -59,8 +54,7 @@ module.exports = {
       return message.reply('Bu hafta RolePlay yapmadığınız için maaş alamadınız. Yeni hafta için bekleyin.');
     }
 
-    // 1 hafta bekleniyor mu kontrolü
-    if (salaryData.lastClaimed && (now - salaryData.lastClaimed < oneWeek)) {
+    if (salaryData.lastClaimed && now - salaryData.lastClaimed < oneWeek) {
       const remaining = oneWeek - (now - salaryData.lastClaimed);
       const days = Math.floor(remaining / (24 * 60 * 60 * 1000));
       const hours = Math.floor((remaining % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
@@ -68,7 +62,6 @@ module.exports = {
       return message.reply(`Zaten maaş aldın. Yeni maaş için **${days} gün, ${hours} saat, ${minutes} dakika** beklemelisin.`);
     }
 
-    // Kullanıcının rollerine göre maaş tutarını bul
     const member = message.member;
     const salaryAmount = Object.keys(roles).reduce((max, roleId) => {
       return member.roles.cache.has(roleId) ? Math.max(max, roles[roleId]) : max;
@@ -78,7 +71,6 @@ module.exports = {
       return message.reply('Maaş alabileceğiniz bir rolünüz bulunmuyor.');
     }
 
-    // Bakiye güncelle
     try {
       await Balance.findByIdAndUpdate(
         userId,
@@ -90,11 +82,9 @@ module.exports = {
       return message.reply('Bakiye güncellenirken bir hata oluştu.');
     }
 
-    // Maaş zamanı güncelle
     salaryData.lastClaimed = now;
     await salaryData.save();
 
-    // Embed mesaj oluştur ve gönder
     const embed = new MessageEmbed()
       .setTitle('༒ Maaş Ödendi')
       .setDescription(`**${salaryAmount} $** maaş hesabınıza yatırıldı.`)
