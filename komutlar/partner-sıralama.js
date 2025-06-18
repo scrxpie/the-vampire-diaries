@@ -35,7 +35,7 @@ module.exports = {
 
         const embed = new MessageEmbed()
             .setTitle(` En Çok Partner Yapanlar (${type.charAt(0).toUpperCase() + type.slice(1)})`)
-            .setColor("GOLD");
+            
 
         let rank = 1;
         for (const userData of topUsers) {
