@@ -308,7 +308,7 @@ client.on('messageCreate', async (message) => {
     }
   }
 });
-});
+
 
 
 // fiboBotId'yi tanımlayacağınız yer:
