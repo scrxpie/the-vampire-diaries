@@ -1,4 +1,4 @@
-const Partner = require('./models/Partner');
+const Partner = require('../models/Partner');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = async (message) => {
