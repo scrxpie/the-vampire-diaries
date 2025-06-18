@@ -238,30 +238,52 @@ const fiboBotId = '735147814878969968';
 
 const requireddRoleId = '1368538991632060436'; // Ödül verilecek rolün ID'si
 // botu seviyesini kontrol et
+const { MessageEmbed } = require('discord.js');
+const fiboBotId = '735147814878969968';
+const arcaneBotId = 'ARCADE_BOT_ID_YAZ'; // Arcane bot ID
+const requireddRoleId = '1368538991632060436';
+
+// messageCreate olayında kontrol
 client.on('messageCreate', async (message) => {
-    trackPartnerMessage(message);
+  if (message.author.bot) return;
+
+  // ✅ Fibo Bump Sistemi
+  if (
+    message.author.id === fiboBotId &&
+    message.content.includes('Thx for bumping our Server! We will remind you in 2 hours!')
+  ) {
+    const bumpedUser = message.mentions.users.first();
+    if (bumpedUser) {
+      const rewardAmount = 100;
+
+      await addBalance(bumpedUser.id, rewardAmount);
+
+      const embed = new MessageEmbed()
+        .setTitle('Sunucu Bump Ödülü!')
+        .setDescription(`🎉 Tebrikler ${bumpedUser.username}! Sunucuyu bump'ladığınız için **${rewardAmount}$** ödül kazandınız!`)
+        .setTimestamp();
+
+      message.channel.send({ embeds: [embed] });
+    }
+    return; // Fibo mesajı işlendiyse devam etmesin
+  }
+
+  // ✅ Arcane Seviye Sistemi
   if (message.author.id !== arcaneBotId) return;
   if (!message.content.includes('Yeni levelin')) return;
 
-  // ✅ 1. Kullanıcıyı mesajdan çek
   const userIdMatch = message.content.match(/<@!?(\d+)>/);
   const userId = userIdMatch ? userIdMatch[1] : null;
-
   if (!userId) return;
 
   const member = await message.guild.members.fetch(userId).catch(() => null);
   if (!member) return;
 
-  // ❌ Eğer rol kontrolü yapmak istiyorsan:
-  // if (!member.roles.cache.has(requiredRoleId)) return;
-
-  // ✅ 2. Level bilgisini mesajdan çek
   const levelMatch = message.content.match(/Yeni levelin \*\*(\d+)\*\*/i);
   if (!levelMatch) return;
 
   const level = parseInt(levelMatch[1], 10);
 
-  // ✅ 3. Seviye aralığına göre ödül belirle
   const arcaneRewardTable = {
     '5-10': 200,
     '10-25': 300,
@@ -288,27 +310,7 @@ client.on('messageCreate', async (message) => {
 
     message.channel.send({ embeds: [embed] });
   }
-    if (
-    message.author.id === fiboBotId &&
-    message.content.includes('Thx for bumping our Server! We will remind you in 2 hours!')
-  ) {
-    const bumpedUser = message.mentions.users.first();
-    if (bumpedUser) {
-      const rewardAmount = 100;
-
-      await addBalance(bumpedUser.id, rewardAmount);
-
-      const embed = new MessageEmbed()
-        .setTitle('Sunucu Bump Ödülü!')
-        .setDescription(`🎉 Tebrikler ${bumpedUser.username}! Sunucuyu bump'ladığınız için **${rewardAmount}$** ödül kazandınız!`)
-        
-        .setTimestamp();
-
-      message.channel.send({ embeds: [embed] });
-    }
-  }
 });
-
 
 
 // fiboBotId'yi tanımlayacağınız yer:
