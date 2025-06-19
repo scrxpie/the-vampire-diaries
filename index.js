@@ -243,7 +243,8 @@ const requireddRoleId = '1368538991632060436'; // Ödül verilecek rolün ID'si
 
 // messageCreate olayında kontrol
 client.on('messageCreate', async (message) => {
-  if (message.author.bot) return;
+  trackPartnerMessage(message);
+    if (message.author.bot) return;
 
   // ✅ Fibo Bump Sistemi
   if (
