@@ -236,7 +236,7 @@ const trackPartnerMessage = require('./utils/partner');
 
 const fiboBotId = '735147814878969968';
 
-const requireddRoleId = '1368538991632060436'; // Ödül verilecek rolün ID'si
+const requireddRoleId = '533727549625204747'; // Ödül verilecek rolün ID'si
 // botu seviyesini kontrol et
 
 
