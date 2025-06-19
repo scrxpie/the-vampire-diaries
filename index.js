@@ -294,7 +294,7 @@ client.on('messageCreate', async (message) => {
   }
 });
 
-const fiboBotId = '735147814878969968';
+
 // fiboBotId'yi tanımlayacağınız yer:
 // Botunuzun ana dosyasının en başında, diğer sabitlerinizle birlikte.
                                       // Lütfen bu değeri kendiniz bulun ve buraya yapıştırın.
