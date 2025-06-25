@@ -6,7 +6,7 @@ const LastClaimSchema = new mongoose.Schema({
     _id: String,
     lastClaim: Number
 });
-const BoosterLastClaim = mongoose.model('BoosterLastClaim', LastClaimSchema);
+const LastClaim = mongoose.model('LastClaim', LastClaimSchema);
 
 module.exports = {
     name: 'günlük',
@@ -21,7 +21,7 @@ module.exports = {
 
         // Booster ödül zamanı kontrolü
         const now = Date.now();
-        let lastClaimData = await BoosterLastClaim.findById(userId);
+        let lastClaimData = await LastClaim.findById(userId);
         const lastClaimTime = lastClaimData?.lastClaim || 0;
 
         if (now - lastClaimTime < 86400000) {
@@ -42,7 +42,7 @@ module.exports = {
 
         // Son ödül alım zamanını güncelle
         if (!lastClaimData) {
-            await BoosterLastClaim.create({ _id: userId, lastClaim: now });
+            await LastClaim.create({ _id: userId, lastClaim: now });
         } else {
             lastClaimData.lastClaim = now;
             await lastClaimData.save();
