@@ -482,7 +482,7 @@ const rest = new REST({ version: '9' }).setToken(process.env.TOKEN);
 // Bot hazır olduğunda
 client.once('ready', async () => {
     console.log(`${client.user.tag} başarıyla giriş yaptı!`);
-    client.user.setActivity('Teen Wolf', { type: 'STREAMING', url:'https://www.twitch.tv/theotherrside', status: 'idle' } );
+    client.user.setActivity('The Vampire Diaries', { type: 'STREAMING', url:'https://www.twitch.tv/theotherrside', status: 'idle' } );
   
 
   try {
