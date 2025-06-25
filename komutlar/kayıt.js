@@ -4,16 +4,16 @@ module.exports = {
     name: 'kayıt',
     description: 'Bir kullanıcıyı kaydeder.',
     async execute(message, args) {
-        const kayitsizRolID = '1368538991590113386'; // Kayıtsız rolü
-        const uyeRolID = '1368538991590113387'; // Üye rolü
+        const kayitsizRolID = '1327613823531749436'; // Kayıtsız rolü
+        const uyeRolID = '1327716388726640660'; // Üye rolü
         const otoRolIDs = [
-            '1368538991745568810',
-            '1368538991678459918',
-            '1368538991632060445',
-            '1368538991632060438',
-            '1368538991569272914'
+            '1327975111990579322',
+            '1327975231960256596',
+            '1328066390816456865',
+            '1328419375937622171',
+            '1365694307964551299'
         ]; // Oto roller
-        const logChannelID = '1383126605957824603'; // Log kanalı ID
+        const logChannelID = '1327541284646293507'; // Log kanalı ID
         const logChannel = message.guild.channels.cache.get(logChannelID);
 
         const target = message.mentions.members.first();
@@ -38,8 +38,7 @@ module.exports = {
             // 1. Adım: "Kayıtsız" rolünü kaldır
             await target.roles.remove(kayitsizRol);
             console.log(`${target.user.tag} kullanıcısından Kayıtsız rolü başarıyla kaldırıldı.`);
-
-            // 2. Adım: "Üye" rolünü ekle
+   // 2. Adım: "Üye" rolünü ekle
             await target.roles.add(uyeRol);
             console.log(`${target.user.tag} kullanıcısına Üye rolü başarıyla eklendi.`);
 
@@ -70,18 +69,18 @@ module.exports = {
                 .setThumbnail(target.user.displayAvatarURL({ dynamic: true }))
                 .setTimestamp();
 
-            message.reply({ embeds: [userEmbed] });
+message.reply({ embeds: [userEmbed] });
 
             // 5. Adım: Log kanalına mesaj gönder
             const logEmbed = new MessageEmbed()
                 .setColor('#FFFFFF')
                 .setTitle('Aramıza Hoş Geldin!')
                 .setDescription(
-                    `𝘓𝘶𝘵𝘧𝘦𝘯 𝘒𝘶𝘳𝘢𝘭𝘭𝘢𝘳𝘪 𝘖𝘬𝘶 <#1368538996032147492>, 𝘒𝘦𝘯𝘥𝘪𝘯𝘦 𝘜𝘺𝘨𝘶𝘯 𝘙𝘦𝘯𝘨𝘪 𝘚𝘦𝘤 <#1368538996631670864>. 𝘙𝘰𝘭𝘦𝘗𝘭𝘢𝘺'𝘦 𝘒𝘢𝘵𝘪𝘭𝘮𝘢𝘬 𝘪𝘤𝘪𝘯 <#1368539003250278473> 𝘒𝘢𝘯𝘢𝘭𝘪𝘯𝘪 𝘖𝘬𝘶𝘥𝘶𝘬𝘵𝘢𝘯 𝘚𝘰𝘯𝘳𝘢 𝘍𝘰𝘳𝘮𝘶𝘯𝘶 <#1368539004823408712> 𝘉𝘶𝘳𝘢𝘺𝘢 𝘎𝘰𝘯𝘥𝘦𝘳.`
+                  `𝘓𝘶𝘵𝘧𝘦𝘯 𝘒𝘶𝘳𝘢𝘭𝘭𝘢𝘳𝘪 𝘖𝘬𝘶 <#1327543048690864170>, 𝘒𝘦𝘯𝘥𝘪𝘯𝘦 𝘜𝘺𝘨𝘶𝘯 𝘙𝘦𝘯𝘨𝘪 𝘚𝘦𝘤 <#1327984398833811538>. 𝘙𝘰𝘭𝘦𝘗𝘭𝘢𝘺'𝘦 𝘒𝘢𝘵𝘪𝘭𝘮𝘢𝘬 𝘪𝘤𝘪𝘯 <#1327583221764067379> 𝘒𝘢𝘯𝘢𝘭𝘪𝘯𝘪 𝘖𝘬𝘶𝘥𝘶𝘬𝘵𝘢𝘯 𝘚𝘰𝘯𝘳𝘢 𝘍𝘰𝘳𝘮𝘶𝘯𝘶 <#1327714017086668890> 𝘉𝘶𝘳𝘢𝘺𝘢 𝘎𝘰𝘯𝘥𝘦𝘳.`
                 )
                 .addField('Kayıt Eden:', message.author.toString(), true)
                 .setThumbnail(target.user.displayAvatarURL({ dynamic: true }))
-                .setImage('https://cdn.discordapp.com/attachments/1329559412079198431/1383151667846840370/62aab89ad49df3b632a40f2b0f5d13d2.gif')
+                .setImage('https://i.imgur.com/btr4bju.gif')
                 .setFooter('Sunucumuza hoş geldiniz!', message.guild.iconURL({ dynamic: true }));
 
             if (logChannel) {
