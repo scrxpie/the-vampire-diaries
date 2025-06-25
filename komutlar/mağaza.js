@@ -12,15 +12,12 @@ module.exports = {
         "Spor Araba - 50000$"
     ],
     "Evler": [
-        "**1+0 Apartman - 50000$**",
-        "**1+1 Apartman - 60000$**",
-        "**2+1 Apartman - 70000$**",
-        "**3+1 Apartman - 80000$**",
-        "**Müstakil Ev - 100000$**",
-        "**Dublex Ev - 150000$**",
-        "**Orman Evi - 125000$**",
-        "**Dağ Evi - 100000$**",
-        "**Villa - 200000$**"
+        "**Müstakil Ev - 50000$**",
+        "**Dublex Ev - 60000$**",
+        "**Orman Evi - 70000$**",
+        "**Dağ Evi - 80000$**",
+        "**Villa - 200000$**",
+         "**Malikane - 500000$** "
     ],
     "Mermiler": [
         "**Normal Mermi - 500$**\n> Standart mühimmat. Doğaüstü varlıklara geçici etki.",
@@ -29,40 +26,28 @@ module.exports = {
         "**Kurtboğanlı Mermi - 7500$**\n> Kurtadamları iyileşemez hale getirir.",
         "**Ok - 500$**\n> Zehirli/kutsal türleri mevcuttur."
     ],
-    "Tuzaklar": [
-        "**Elektrikli Şok Cihazı - 5000$**\n> Kas kontrolünü geçici durdurur.",
-        "**Kurşun Tuzakları - 2500$**\n> Fiziksel zarar. İzinsiz girişe karşı savunma.",
-        "**Zincirler - 1500$**\n> Esir alma. Özel materyalli olabilir.",
-        "**Işıklı Tuzak - 2500$**\n> Düşman yaklaşınca sinyal verir.",
-        "**Kurtboğanlı Gaz Bombası - 7500$**\n> Alan etkili. Nefes keser, yavaşlatır."
-    ],
-    "Aletler": [
-        "**Banshee Günlüğü - 5000$**\n> Yaklaşan ölümlerin sezgileri.",
-        "**Bestiary - 8000$**\n> Doğaüstü varlıkların detaylı bilgisi.",
-        "**Druid Ritüel Kitabı - 10000$**\n> Koruma büyüleri ve ayinler.",
-        "**Triskelion - 12000$**\n> Beta kurtlar için denge aracı.",
-        "**Kurtboğanlı İğne - 3000$**\n> Sessiz ve zayıflatıcı saldırı.",
-        "**Zayıf Noktalar Kitabı - 15000$**\n> Tüm türlerin zayıflıkları.",
-        "**Üvez Tozu - 10000$**\n> Kitsune ve ruhani varlıklara karşı bariyer sağlar.",
-        "**Kurtboğan - 1500$**\n> Doğaüstü varlıklara acı ve zayıflık verir.",
-        "**Sarı Kurtboğan - 50000$**\n> Daha etkili kurtboğan türü."
-    ],
-    "Klasik ve Modern Silahlar": [
-        "**Tabanca - 10000$**\n> Hafif, hızlı müdahale için.",
-        "**Yay - 30000$**\n> Sessiz saldırılar için.",
-        "**Arbalet - 30000$**\n> Güçlü ve isabetli.",
-        "**Kılıç/Katana - 12000$**\n> Yakın dövüş. Özel güçlü olabilir.",
-        "**Tüfek - 40000$**\n> Uzak menzil, yüksek hasar.",
-        "**Pompalı Tüfek - 40000$**\n> Yakın mesafe yıkım.",
-        "**Makineli - 50000$**\n> Seri atış, kalabalık hedefler."
-    ]
+   "Teçhizatlar": [
+                "**Tabanca - 6000$**",
+                "**Sonsuz Tahta Mermi - 3000$**",
+                "**Arbalet - 3500$**",
+                "**Mine Çiçeği - 500$**",
+                "**Mine Bombası - 1500$**",
+                "**Mine Şırıngası - 1000$**", 
+                "**Kurtboğan - 500$**",
+                "**Kurtboğan Bombası - 1500$**",
+                "**Kurtboğan Şırıngası - 1000$**"
+            ],
+            "Takılar": [
+                "**Gün Işığı Takıları - 1000$**",
+                "**Ay Işığı Takıları - 2000$**",
+                "**Gilbert Yüzüğü - 2500$**"
+            ]
 };
 
         const categoryImages = {
             "Araçlar": "https://i.imgur.com/5NjHuR0.gif",
             "Evler": "https://link-to-your-image.com/evler.jpg",
-            "Doğaüstü Silahlar ve Aletler": "https://link-to-your-image.com/supernatural.jpg",
-            "Klasik ve Modern Silahlar": "https://link-to-your-image.com/weapons.jpg",
+        
             "Takılar": "https://link-to-your-image.com/takilar.jpg"
         };
 
