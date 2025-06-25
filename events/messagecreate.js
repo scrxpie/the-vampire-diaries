@@ -15,7 +15,7 @@ module.exports = async (client, message) => {
     if (message.author.bot || excludedChannels.includes(message.channel.id)) return;
 
     // 📌 PARTNER MESAJ TAKİBİ
-    trackPartnerMessage(message);
+    
 
     // 📌 FIBO BUMP ÖDÜLÜ
     if (
