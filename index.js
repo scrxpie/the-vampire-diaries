@@ -560,13 +560,7 @@ cron.schedule('*/5 * * * *', () => {
     updateVoiceChannelName(client);
   });
 
- } catch (err) {
-    console.error('MongoDB bağlantı hatası veya import hatası:', err);
-  }
-}
-
-start();
-
+ 
 });
 const partnerResetScheduler = require('./utils/PartnerReset');
 
@@ -587,3 +581,9 @@ weatherSender(client);
 client.login(process.env.TOKEN);
 module.exports = { client }; // client'ı export ediyoruz
       
+ } catch (err) {
+    console.error('MongoDB bağlantı hatası veya import hatası:', err);
+  }
+}
+
+start();
