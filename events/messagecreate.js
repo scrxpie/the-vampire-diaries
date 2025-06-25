@@ -110,7 +110,7 @@ module.exports = async (client, message) => {
 
     // 📌 PREFIX KOMUTLARI (.komut şeklindeki)
     
-    }
+    
 };
 
 // 💰 MONGODB BAKİYE EKLEME FONKSİYONU
