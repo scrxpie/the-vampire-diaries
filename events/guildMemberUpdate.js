@@ -7,8 +7,8 @@ module.exports = {
         if (!oldMember.premiumSince && newMember.premiumSince) {
             // 3 saniye gecikme ekleyerek boost işleminin gerçekten tamamlanmasını bekleyelim
             setTimeout(() => {
-                const boosterRoleID = "1370821728778846328"; // Booster rolü ID'si
-                const boosterChannelID = "1368538996631670867"; // Boost teşekkür mesajının gideceği kanal ID'si
+                const boosterRoleID = "1327637020767555626"; // Booster rolü ID'si
+                const boosterChannelID = "1327984835603468319"; // Boost teşekkür mesajının gideceği kanal ID'si
                 const channel = newMember.guild.channels.cache.get(boosterChannelID);
                 
                 if (!channel) return;
@@ -21,9 +21,9 @@ module.exports = {
                         *The Other Side'a takviye yaptığın için teşekkür ederiz!  
                         Özel ayrıcalıklar ve ödüller kazandın!*  
                         ** 𝐀𝐘𝐑𝐈𝐂𝐀𝐋𝐈𝐊 𝐁𝐈𝐋𝐆𝐈𝐋𝐄𝐑𝐈:**  
-                        - <#1368538996631670868>  
+                        - <#1329567625809887383>  
                     `)
-                    .setImage("https://cdn.discordapp.com/attachments/1368538992257273993/1383067720601440320/IMG_5285.gif")
+                    .setImage("https://i.imgur.com/j5Tl3uk.gif")
                     .setFooter(`Şu anki boost sayısı: ${newMember.guild.premiumSubscriptionCount}`);
 
                 channel.send({ content: `<@${newMember.id}>`, embeds: [embed] });
