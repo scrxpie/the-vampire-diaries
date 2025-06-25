@@ -16,7 +16,7 @@ module.exports = {
         const userId = message.author.id;
 
         if (!message.member.roles.cache.has(boosterRoleId)) {
-            return message.reply('Bu komutu sadece booster rolüne sahip kullanıcılar kullanabilir!');
+            return message.reply('Bu komutu kullanmak için Roleplaye katılın.');
         }
 
         // Booster ödül zamanı kontrolü
