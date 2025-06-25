@@ -27,15 +27,15 @@ require('./komutlar/activityWatcher');
 const importWordsData = require('./scripts/importWords');
 
 
-mongoose.connect(process.env.MONGO_URI, { // veya doğrudan bağlantı dizesi
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-}).then(() => {
-    console.log('MongoDB\'ye başarıyla bağlandı!');
-}).catch(err => {
-    console.error('MongoDB bağlantı hatası:', err);
-});
-await importWordsData();
+async function start() {
+  try {
+    await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("MongoDB'ye başarıyla bağlandı!");
+
+    await importWordsData();
 const kelime = require('./komutlar/kelime');
 const hkelime = require('./komutlar/hkelime');
 
@@ -573,6 +573,12 @@ cron.schedule('*/5 * * * *', () => {
     updateVoiceChannelName(client);
   });
 
+ } catch (err) {
+    console.error('MongoDB bağlantı hatası veya import hatası:', err);
+  }
+}
+
+start();
 
 });
 const partnerResetScheduler = require('./utils/PartnerReset');
@@ -593,3 +599,4 @@ weatherSender(client);
 // Botu başlat
 client.login(process.env.TOKEN);
 module.exports = { client }; // client'ı export ediyoruz
+      
