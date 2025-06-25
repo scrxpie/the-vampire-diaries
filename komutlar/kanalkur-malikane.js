@@ -27,7 +27,7 @@ module.exports = {
         }
 
         // Kategori ID'sini burada girin
-        const kategoriId = '1328094321211080745';  // Verdiğiniz Kategori ID
+        const kategoriId = '1346125340564656190';  // Verdiğiniz Kategori ID
         const kategori = message.guild.channels.cache.get(kategoriId);
         if (!kategori) {
             return message.reply("Belirtilen kategori bulunamadı.");
@@ -48,7 +48,7 @@ module.exports = {
                 "Yatak Odası",
                 "Misafir Odası",
                 "Balkon",
-              
+              "Merdiven",
                 "Koridor",
                 "Mutfak",
                 "Salon",
