@@ -6,7 +6,7 @@ module.exports = {
     name: 'guildMemberRemove',
     execute(member) {
         // Ayrılma mesajı kanalı
-        const farewellChannel = member.guild.channels.cache.get('1368538996032147489'); // Ayrılma kanalı ID'sini buraya girin
+        const farewellChannel = member.guild.channels.cache.get('1327543010065645582'); // Ayrılma kanalı ID'sini buraya girin
         if (!farewellChannel) return console.error('Ayrılma kanalı bulunamadı!');
 
         // Hoşçakal Embed
@@ -22,7 +22,7 @@ module.exports = {
             )
             .addField('Kullanıcı:', member.user.username, true) // Kullanıcı adı
             .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 1024 })) // Sağ üst köşede kullanıcı avatarı
-            .setImage('https://cdn.discordapp.com/attachments/1368538992257273993/1383064958429958296/IMG_5287.gif') // Ayrılma GIF'i
+            .setImage('https://i.imgur.com/gnJG7lk.gif') // Ayrılma GIF'i
             .setFooter({
                 text: `Hoşçakal, ${member.user.username}!`,
                 iconURL: member.guild.iconURL({ dynamic: true }),
