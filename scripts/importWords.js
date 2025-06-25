@@ -5,11 +5,6 @@ const WordModel = require('../models/Words'); // Path'i senin yapına göre düz
 
 const jsonPath = path.join(__dirname, 'data.json');
 
-mongoose.connect('mongodb://localhost:27017/veritabaniAdi', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).then(async () => {
-  console.log("✅ MongoDB bağlantısı başarılı.");
 
   const rawData = fs.readFileSync(jsonPath, 'utf8');
   const data = JSON.parse(rawData);
