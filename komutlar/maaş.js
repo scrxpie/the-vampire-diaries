@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+/* const { MessageEmbed } = require('discord.js');
 const Salary = require('../models/Salary');
 const Balance = require('../models/Balance');
 
@@ -93,4 +93,4 @@ module.exports = {
 
     message.reply({ embeds: [embed] });
   }
-};
+}; */
