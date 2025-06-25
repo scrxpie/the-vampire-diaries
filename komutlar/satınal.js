@@ -25,56 +25,45 @@ module.exports = {
         }
 
         // Orijinal ürünler fiyatları ile
-        const items = [
-            { name: "Eski Model Araba", price: 30000 },
-            { name: "Standart Araba", price: 40000 },
-            { name: "Motosiklet", price: 20000 },
-            { name: "Spor Araba", price: 50000 },
+       const items = [
+    // Araçlar
+    { name: "Eski Model Araba", price: 30000 },
+    { name: "Standart Araba", price: 40000 },
+    { name: "Motosiklet", price: 20000 },
+    { name: "Spor Araba", price: 50000 },
 
-            { name: "1+0 Apartman", price: 50000 },
-            { name: "1+1 Apartman", price: 60000 },
-            { name: "2+1 Apartman", price: 70000 },
-            { name: "3+1 Apartman", price: 80000 },
-            { name: "Müstakil Ev", price: 100000 },
-            { name: "Dublex Ev", price: 150000 },
-            { name: "Orman Evi", price: 125000 },
-            { name: "Dağ Evi", price: 100000 },
-            { name: "Villa", price: 200000 },
+    // Evler
+    { name: "Müstakil Ev", price: 50000 },
+    { name: "Dublex Ev", price: 60000 },
+    { name: "Orman Evi", price: 70000 },
+    { name: "Dağ Evi", price: 80000 },
+    { name: "Villa", price: 200000 },
+    { name: "Malikane", price: 500000 },
 
-            { name: "Normal Mermi", price: 500 },
-            { name: "Gümüş Mermi", price: 7500 },
-            { name: "Sarı Kurtboğanlı Mermi", price: 70000 },
-            { name: "Kurtboğanlı Mermi", price: 7500 },
-            { name: "Ok", price: 500 },
+    // Mermiler
+    { name: "Normal Mermi", price: 500 },
+    { name: "Gümüş Mermi", price: 7500 },
+    { name: "Sarı Kurtboğanlı Mermi", price: 70000 },
+    { name: "Kurtboğanlı Mermi", price: 7500 },
+    { name: "Ok", price: 500 },
 
-            { name: "Elektrikli Şok Cihazı", price: 5000 },
-            { name: "Kurşun Tuzakları", price: 2500 },
-            { name: "Zincirler", price: 1500 },
-            { name: "Işıklı Tuzak", price: 2500 },
+    // Teçhizatlar
+    { name: "Tabanca", price: 6000 },
+    { name: "Sonsuz Tahta Mermi", price: 3000 },
+    { name: "Arbalet", price: 3500 },
+    { name: "Mine Çiçeği", price: 500 },
+    { name: "Mine Bombası", price: 1500 },
+    { name: "Mine Şırıngası", price: 1000 },
+    { name: "Kurtboğan", price: 500 },
+    { name: "Kurtboğan Bombası", price: 1500 },
+    { name: "Kurtboğan Şırıngası", price: 1000 },
 
-            { name: "Banshee Günlüğü", price: 5000 },
-            { name: "Bestiary", price: 8000 },
-            { name: "Druid Ritüel Kitabı", price: 10000 },
-            { name: "Triskelion", price: 12000 },
-            { name: "Kurtboğanlı İğne", price: 3000 },
-            { name: "Zayıf Noktalar Kitabı", price: 15000 },
-            { name: "Üvez Tozu", price: 10000 },
-            { name: "Kurtboğan", price: 1500 },
-            { name: "Sarı Kurtboğan", price: 50000 },
-            { name: "Kurtboğanlı Gaz Bombası", price: 7500 },
+    // Takılar
+    { name: "Gün Işığı Takıları", price: 1000 },
+    { name: "Ay Işığı Takıları", price: 2000 },
+    { name: "Gilbert Yüzüğü", price: 2500 }
+];
 
-            { name: "Tabanca", price: 10000 },
-            { name: "Yay", price: 30000 },
-            { name: "Arbalet", price: 30000 },
-            { name: "Kılıç/Katana", price: 12000 },
-            { name: "Tüfek", price: 40000 },
-            { name: "Pompalı Tüfek", price: 40000 },
-            { name: "Makineli", price: 50000 },
-
-            { name: "Gün Işığı Takıları", price: 1000 },
-            { name: "Ay Işığı Takıları", price: 2000 },
-            { name: "Gilbert Yüzüğü", price: 2500 }
-        ];
 
         const foundItem = items.find(item => item.name.toLowerCase() === itemName.toLowerCase());
         if (!foundItem) {
