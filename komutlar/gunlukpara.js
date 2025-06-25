@@ -2,17 +2,17 @@ const { MessageEmbed } = require('discord.js');
 const Balance = require('../models/Balance');
 const mongoose = require('mongoose');
 
-const boosterLastClaimSchema = new mongoose.Schema({
+const LastClaimSchema = new mongoose.Schema({
     _id: String,
     lastClaim: Number
 });
-const BoosterLastClaim = mongoose.model('BoosterLastClaim', boosterLastClaimSchema);
+const BoosterLastClaim = mongoose.model('BoosterLastClaim', LastClaimSchema);
 
 module.exports = {
-    name: 'bgünlük',
+    name: 'günlük',
     description: 'Boosterlara özel günlük ödül komutu.',
     async execute(message) {
-        const boosterRoleId = '1327637020767555626';
+        const boosterRoleId = '1327981428805210204';
         const userId = message.author.id;
 
         if (!message.member.roles.cache.has(boosterRoleId)) {
@@ -37,7 +37,7 @@ module.exports = {
             balanceData = new Balance({ _id: userId });
         }
 
-        balanceData.balance += 1000;
+        balanceData.balance += 500;
         await balanceData.save();
 
         // Son ödül alım zamanını güncelle
@@ -51,7 +51,7 @@ module.exports = {
         // Embed mesaj
         const embed = new MessageEmbed()
             .setTitle(' Günlük Ödül')
-            .setDescription('Tebrikler, günlük ödemenizi başarıyla aldınız!\ **1000 para** cüzdanınıza eklendi.')
+            .setDescription('Tebrikler, günlük ödemenizi başarıyla aldınız!\ **500 para** cüzdanınıza eklendi.')
             .setColor('AQUA')
             .setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
             .setFooter('The Other Side')
