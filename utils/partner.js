@@ -5,7 +5,7 @@ module.exports = async (message) => {
     if (message.author.bot || !message.guild) return;
 
     // Partner kanalı kontrolü (istersen kaldırabilirsin)
-    const allowedChannelID = '1368538997789560926'; // örnek: '123456789012345678'
+    const allowedChannelID = '1327625994411970560'; // örnek: '123456789012345678'
     if (message.channel.id !== allowedChannelID) return;
 
     // Mesajda discord.gg linki var mı?
