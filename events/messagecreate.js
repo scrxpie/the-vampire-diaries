@@ -7,7 +7,7 @@ const prefix = '.';
 const arcaneBotId = '437808476106784770';
 const fiboBotId = '735147814878969968';
 const excludedChannels = ['1327621148606988349', '1327625994411970560'];
-const notificationChannelId = '1368539004823408719';
+const notificationChannelId = '1327609643853156362';
 const rewardPer1000 = 3000;
 
 module.exports = async (client, message) => {
