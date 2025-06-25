@@ -5,10 +5,11 @@ module.exports = {
   description: 'Başka bir rol seti sunar ve kullanıcıların bu rolleri alıp çıkarmasına olanak verir.',
   async execute(message, args) {
     const roles = [
-      { name: 'Partner Ping', id: '1368538991632060437' },
-      { name: 'Bot Duyuru Ping', id: '1368538991569272919' },
-      { name: 'RolePlay Ping', id: '1383138609858871418' },
-      { name: 'Oyun Ping', id: '1383133775747350669' }
+      { name: 'Partner Ping', id: '1330264276447006822' },
+      { name: 'Bot Duyuru Ping', id: '1356981767923433643' },
+      { name: 'RolePlay Ping', id: '1381214693053567117' },
+      { name: 'Oyun Ping', id: '1381214829410385960' },
+       { name: 'Sohbet Ping', id: '1387458772167032872' }
     ];
 
     const row = new MessageActionRow();
@@ -29,11 +30,13 @@ module.exports = {
 🔔 **Partner Ping** – Partner duyurularından haberdar olun.\n
 🤖 **Bot Duyuru Ping** – Bot ile ilgili yenilik ve bakım bildirimlerini alın.\n
 🎭 **RolePlay Ping** – Roleplay davetlerini almak için bu rolu alın.\n
-🎮 **Oyun Ping** – Oyun etkinlikleri ve duyurularını kaçırmayın.`
+🎮 **Oyun Ping** – Oyun etkinlikleri ve duyurularını kaçırmayın. \n
+💬 Sohbet Ping – Aktif sohbetlere katılmak ve etkileşim pinglerini almak için bu rolu alın. `
       )
       .setTimestamp()
       .setFooter('The Other Side', message.guild.iconURL());
-await message.channel.send({
+
+    await message.channel.send({
       embeds: [embed],
       components: [row],
     });
