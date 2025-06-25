@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+/* const { MessageEmbed } = require("discord.js");
 const Stats = require("../models/Stat");
 
 function statBarYuzde(sayi) {
@@ -91,4 +91,4 @@ module.exports = {
 
     return message.reply({ embeds: [embed] });
   }
-};
+}; */
