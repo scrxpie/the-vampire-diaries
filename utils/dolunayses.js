@@ -1,6 +1,6 @@
 const { getAyEvresi } = require('./dolunay');
 
-const SES_KANALI_ID = '1383822441750724669';
+const SES_KANALI_ID = '1387508398123122727';
 
 async function updateVoiceChannelName(client) {
   try {
