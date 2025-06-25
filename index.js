@@ -1,4 +1,4 @@
-require('./scripts/importWords');
+
 const fs = require('fs');
 
 const path = require('path');
@@ -24,6 +24,7 @@ fs.readdirSync(commandsDir).forEach(file => {
     }
 });
 require('./komutlar/activityWatcher');
+const importWordsData = require('./scripts/importWords');
 
 
 mongoose.connect(process.env.MONGO_URI, { // veya doğrudan bağlantı dizesi
@@ -34,6 +35,7 @@ mongoose.connect(process.env.MONGO_URI, { // veya doğrudan bağlantı dizesi
 }).catch(err => {
     console.error('MongoDB bağlantı hatası:', err);
 });
+await importWordsData();
 const kelime = require('./komutlar/kelime');
 const hkelime = require('./komutlar/hkelime');
 
