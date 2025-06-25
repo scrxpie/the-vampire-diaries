@@ -135,7 +135,7 @@ client.on('interactionCreate', async interaction => {
         await interaction.reply({ content: 'Komut çalıştırılırken bir hata oluştu!', ephemeral: true });
     }
 });
-
+client.on('messageCreate', message => require('./events/messagecreate')(client, message));
 // Mesaj event'i
 client.on('messageCreate', (message) => {
     if (message.author.bot || excludedChannels.includes(message.channel.id)) return;
