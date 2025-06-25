@@ -170,20 +170,7 @@ client.on('messageCreate', (message) => {
 
     const Balance = require('./models/Balance');
 
-async function addBalance(userId, amount) {
-  try {
-    let balanceData = await Balance.findById(userId);
 
-    if (!balanceData) {
-      balanceData = new Balance({ _id: userId, balance: 0, bank: 0 });
-    }
-
-    balanceData.balance += amount;
-    await balanceData.save();
-  } catch (error) {
-    console.error('Bakiye güncellenirken hata oluştu:', error);
-  }
-}
 
     // Eski seviye (kaydedilmiş)
     const Words = require('./models/Words');
