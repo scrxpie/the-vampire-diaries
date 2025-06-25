@@ -93,10 +93,7 @@ module.exports = async (client, message) => {
             wordData.lastLevel = currentLevel;
         }
 
-        await wordData.save();
-    } catch (err) {
-        console.error('Kelime takibi hatası:', err);
-    }
+        
 
     // 📌 PREFIX KOMUTLARI (.komut şeklindeki)
     
