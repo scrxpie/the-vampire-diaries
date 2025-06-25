@@ -75,7 +75,8 @@ module.exports = async (client, message) => {
     }
 
     // 📌 KELİME SAYMA ve SEVİYE HESAPLAMA
-    
+    wordData = await Words.findById(message.author.id);
+
         const currentLevel = Math.floor(wordData.words / 1000);
         if (currentLevel > (wordData.lastLevel || 0)) {
             await addBalance(message.author.id, rewardPer1000);
