@@ -568,12 +568,7 @@ const partnerResetScheduler = require('./utils/PartnerReset');
 
     partnerResetScheduler(); // reset sistemi başlatılıyor
 
-const {ayPanoGuncelle} = require('./utils/dolunay');
 
-
-  ayPanoGuncelle(client);  // cron burada başlayacak
-const weatherSender = require('./utils/havadurumu'); 
-weatherSender(client);
 
 
 
