@@ -19,13 +19,7 @@ module.exports = {
         "**Villa - 200000$**",
          "**Malikane - 500000$** "
     ],
-    "Mermiler": [
-        "**Normal Mermi - 500$**\n> Standart mühimmat. Doğaüstü varlıklara geçici etki.",
-        "**Gümüş Mermi - 7500$**\n> Kurtadamlar için ölümcül. Zehir etkili.",
-        "**Sarı Kurtboğanlı Mermi - 70000$**\n> Kurtadamları iyileşemez hale getirir.",
-        "**Kurtboğanlı Mermi - 7500$**\n> Kurtadamları iyileşemez hale getirir.",
-        "**Ok - 500$**\n> Zehirli/kutsal türleri mevcuttur."
-    ],
+  
    "Teçhizatlar": [
                 "**Tabanca - 6000$**",
                 "**Sonsuz Tahta Mermi - 3000$**",
