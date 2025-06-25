@@ -6,7 +6,7 @@ module.exports = {
             return message.reply("Bu komut yalnızca sunucularda çalışabilir.");
         }
 
-        const allowedGuildId = '1368538991569272912';
+        const allowedGuildId = '1327541284646293504';
         if (message.guild.id !== allowedGuildId) {
             return message.reply("Bu komut yalnızca belirli bir sunucuda çalışabilir.");
         }
@@ -20,7 +20,7 @@ module.exports = {
             return message.reply("Lütfen geçerli bir ev ismi girin.");
         }
 
-        const kategoriId = '1384570574902263818';
+        const kategoriId = '1328094321211080745';
         const kategori = message.guild.channels.cache.get(kategoriId);
         if (!kategori) {
             return message.reply("Belirtilen kategori bulunamadı.");
