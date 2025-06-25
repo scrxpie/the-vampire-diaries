@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+/* const { MessageEmbed } = require('discord.js');
 const musicIcons = require('../icons.js');  // icons.js dosyasını import ettik
 
 module.exports = {
@@ -15,4 +15,4 @@ module.exports = {
 
     return message.channel.send({ embeds: [embed] });  // Embed mesajı gönder
   }
-};
+}; */
