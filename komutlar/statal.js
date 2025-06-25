@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+/* const { MessageEmbed } = require("discord.js");
 const Word = require("../models/Words");
 const Stat = require("../models/Stat");
 
@@ -63,4 +63,4 @@ module.exports = {
       ]
     });
   }
-};
+}; */
