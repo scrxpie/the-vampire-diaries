@@ -12,7 +12,7 @@ module.exports = {
     name: 'bgünlük',
     description: 'Boosterlara özel günlük ödül komutu.',
     async execute(message) {
-        const boosterRoleId = '1370821728778846328';
+        const boosterRoleId = '1327637020767555626';
         const userId = message.author.id;
 
         if (!message.member.roles.cache.has(boosterRoleId)) {
