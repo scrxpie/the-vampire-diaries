@@ -50,8 +50,8 @@ module.exports = {
 
             // Embedli yanıt mesajı
             const embed = new MessageEmbed()
-                .setColor('#00FF00')
-                .setTitle('Rol Verme İşlemi Başarılı')
+                
+                .setTitle('Rol Verildi.')
                 .setDescription(`${member.user.username} kullanıcısına başarıyla **${roleName}** rolü verildi.`)
                 .addField('Kullanıcı:', member.user.username, true)
                 .addField('Rol:', roleName, true)
