@@ -21,20 +21,20 @@ module.exports = {
     ],
   
    "Teçhizatlar": [
-                "**Tabanca - 6000$**",
-                "**Sonsuz Tahta Mermi - 3000$**",
-                "**Arbalet - 3500$**",
-                "**Mine Çiçeği - 500$**",
-                "**Mine Bombası - 1500$**",
-                "**Mine Şırıngası - 1000$**", 
-                "**Kurtboğan - 500$**",
-                "**Kurtboğan Bombası - 1500$**",
-                "**Kurtboğan Şırıngası - 1000$**"
+                "**Tabanca - 15000**",
+                "**Sonsuz Tahta Mermi - 10000**",
+                "**Arbalet - 10000$**",
+                "**Mine Çiçeği - 2000$**",
+                "**Mine Bombası - 5000$**",
+                "**Mine Şırıngası - 4000$**", 
+                "**Kurtboğan - 2000**",
+                "**Kurtboğan Bombası - 5000$**",
+                "**Kurtboğan Şırıngası - 4000$**"
             ],
             "Takılar": [
-                "**Gün Işığı Takıları - 1000$**",
-                "**Ay Işığı Takıları - 2000$**",
-                "**Gilbert Yüzüğü - 2500$**"
+                "**Gün Işığı Takıları - 5000$**",
+                "**Ay Işığı Takıları - 10000$**",
+                "**Gilbert Yüzüğü - 50000$**"
             ]
 };
 
