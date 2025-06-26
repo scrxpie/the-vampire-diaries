@@ -56,20 +56,20 @@ module.exports = {
     { name: "Ok", price: 500 },
 
     // Teçhizatlar
-    { name: "Tabanca", price: 6000 },
-    { name: "Sonsuz Tahta Mermi", price: 3000 },
-    { name: "Arbalet", price: 3500 },
-    { name: "Mine Çiçeği", price: 500 },
-    { name: "Mine Bombası", price: 1500 },
-    { name: "Mine Şırıngası", price: 1000 },
-    { name: "Kurtboğan", price: 500 },
-    { name: "Kurtboğan Bombası", price: 1500 },
-    { name: "Kurtboğan Şırıngası", price: 1000 },
+    { name: "Tabanca", price: 15000 },
+    { name: "Sonsuz Tahta Mermi", price: 10000 },
+    { name: "Arbalet", price: 10000 },
+    { name: "Mine Çiçeği", price: 2000 },
+    { name: "Mine Bombası", price: 5000 },
+    { name: "Mine Şırıngası", price: 4000 },
+    { name: "Kurtboğan", price: 2000 },
+    { name: "Kurtboğan Bombası", price: 5000 },
+    { name: "Kurtboğan Şırıngası", price: 4000 },
 
     // Takılar
-    { name: "Gün Işığı Takıları", price: 1000 },
-    { name: "Ay Işığı Takıları", price: 2000 },
-    { name: "Gilbert Yüzüğü", price: 2500 }
+    { name: "Gün Işığı Takıları", price: 5000 },
+    { name: "Ay Işığı Takıları", price: 10000 },
+    { name: "Gilbert Yüzüğü", price: 50000 }
 ];
 
 
