@@ -24,7 +24,7 @@ async function fetchLanyardData(userId) {
 function hasGuildTag(lanyardData) {
   if (!lanyardData || !lanyardData.activities) return false;
 
-  const guildTag = 'THEOTHERSIDE'; // Buraya kendi sunucu tagını yaz
+  const guildTag = 'SIDE'; // Buraya kendi sunucu tagını yaz
 
   for (const activity of lanyardData.activities) {
     if (activity.type === 4 && activity.state && activity.state.includes(guildTag)) {
