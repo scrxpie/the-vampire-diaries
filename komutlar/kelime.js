@@ -20,12 +20,16 @@ async function trackWords(message) {
   if (message.author.bot) return;
 
   let channel = message.channel;
-  let parentId = channel.parentId;
+  if (!channel) return;
 
-  if (channel.isThread()) {
+  // Eğer mesaj bir thread içindeyse, üst kanala çık
+  if (channel.isThread?.()) {
+    if (!channel.parent) return;
     channel = channel.parent;
-    parentId = channel.parentId;
   }
+
+  // Kategori ID'sini al
+  const parentId = channel.parentId ?? null;
 
   const { channelIds, categoryIds } = await getAllowedChannelsAndCategories();
 
