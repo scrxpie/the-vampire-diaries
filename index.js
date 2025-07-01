@@ -171,6 +171,29 @@ client.on('messageCreate', (message) => {
     const Balance = require('./models/Balance');
 
 
+async function addBalance(userId, amount) {
+  try {
+    // Kullanıcının bakiyesini bul veya yeni oluştur
+    let userBalance = await Balance.findById(userId);
+
+    if (!userBalance) {
+      userBalance = new Balance({
+        _id: userId,
+        balance: amount, // doğrudan amount kadar başlat
+        bank: 0
+      });
+    } else {
+      userBalance.balance += amount;
+    }
+
+    await userBalance.save();
+    console.log(`✅ ${userId} kullanıcısına ${amount}$ eklendi.`);
+  } catch (err) {
+    console.error('❌ Bakiye eklenirken hata oluştu:', err);
+  }
+}
+
+module.exports = { addBalance };
 
     // Eski seviye (kaydedilmiş)
     const Words = require('./models/Words');
