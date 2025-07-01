@@ -87,30 +87,7 @@ async function deploySlashCommands() {
 }
 
 // Para ekleme fonksiyonu
-function addBalance(userId, amount, client) {
-    let balanceData = {};
-    try {
-        if (fs.existsSync(balanceDataPath)) {
-            balanceData = JSON.parse(fs.readFileSync(balanceDataPath, 'utf8'));
-        }
-    } catch (error) {
-        console.error('Bakiye verisi okuma hatası:', error);
-    }
 
-    if (!balanceData[userId]) {
-        balanceData[userId] = { balance: 0 };
-    }
-
-    balanceData[userId].balance += amount;
-
-    try {
-        fs.writeFileSync(balanceDataPath, JSON.stringify(balanceData, null, 2));
-    } catch (error) {
-        console.error('Bakiye verisi yazma hatası:', error);
-    }
-
-    
-    }
 // JSON dosyasının yolu
 const filePath = './data/kelimeVerisi.json';
 const rewardAmount = 3000;
