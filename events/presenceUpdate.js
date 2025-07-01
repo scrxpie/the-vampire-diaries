@@ -1,5 +1,5 @@
 const { checkAndUpdateRole } = require('../utils/tagRoleManager');
-const GUILD_ID = '1327541284646293504
+const GUILD_ID = '1327541284646293504'
 const ROLE_ID = '1389547560682782731';
 
 module.exports = {
