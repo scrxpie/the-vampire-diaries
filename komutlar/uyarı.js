@@ -18,7 +18,7 @@ module.exports = {
         const warn2Role = message.guild.roles.cache.find(r => r.name === "Uyarı-2");
         const warn3Role = message.guild.roles.cache.find(r => r.name === "Uyarı-3");
          
-        const logChannelId = "1368538999362424904"; // Log kanalının ID'si
+        const logChannelId = "1331625066642931722"; // Log kanalının ID'si
         const logChannel = message.guild.channels.cache.get(logChannelId);
 
         if (!warn1Role || !warn2Role) return message.reply("`Uyarı-1` veya `Uyarı-2` rolü bulunamadı!");
