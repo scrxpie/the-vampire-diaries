@@ -1,4 +1,4 @@
-const AdamAsmaca = require('../../models/AdamAsmaca');
+const AdamAsmaca = require('../models/AdamAsmaca');
 
 module.exports = {
   name: 'tahmin',
