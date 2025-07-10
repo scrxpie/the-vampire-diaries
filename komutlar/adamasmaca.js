@@ -31,8 +31,16 @@ module.exports = {
   description: 'Adam asmaca oyununu başlatır',
   async execute(message) {
     const kontrol = await AdamAsmaca.findOne({ channelId: message.channel.id });
-    if (kontrol) return message.reply("Bu kanalda zaten aktif bir oyun var.");
 
+if (kontrol) {
+  // Oyunun gerçekten aktif olup olmadığını kontrol et
+  if (kontrol.kelime && kontrol.gösterilen.includes("_")) {
+    return message.reply("Bu kanalda zaten aktif bir oyun var.");
+  } else {
+    // Oyun tamamlanmış ama silinmemişse, yine de sil
+    await AdamAsmaca.deleteOne({ channelId: message.channel.id });
+  }
+}
     const kelime = kelimeler[Math.floor(Math.random() * kelimeler.length)].toLowerCase();
     const gösterilen = kelime.split('').map(() => "_");
 
