@@ -568,8 +568,6 @@ const partnerResetScheduler = require('./utils/PartnerReset');
 
     partnerResetScheduler(); // reset sistemi başlatılıyor
 
-const { periodicCheck } = require('./utils/tagRoleManager');
-      setInterval(() => periodicCheck(client), 10 * 60 * 1000);
 
 
 
