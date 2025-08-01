@@ -171,39 +171,48 @@ async function addBalance(userId, amount) {
 }
 
 module.exports = { addBalance };
-
+const requiredRoleId = '1327981428805210204';
     // Eski seviye (kaydedilmiş)
     const Words = require('./models/Words');
 
-async function calculateLevelAndReward(userId, client, notificationChannelId) {
+async function calculateLevelAndReward(userId, client, notificationChannelId, guildId) {
   try {
-    let wordData = await Words.findById(userId);
+    // Kullanıcının rolünü kontrol et
+    const guild = await client.guilds.fetch(guildId).catch(() => null);
+    if (!guild) return;
 
+    const member = await guild.members.fetch(userId).catch(() => null);
+    if (!member) return;
+
+    if (!member.roles.cache.has(requiredRoleId)) return; // 🔒 Rolü yoksa çık
+
+    // Kelime verisini al
+    let wordData = await Words.findById(userId);
     if (!wordData) {
       wordData = new Words({ _id: userId, words: 0, lastLevel: 0 });
     }
 
     const currentLevel = Math.floor(wordData.words / 1000);
 
-    if (currentLevel > (wordData.lastLevel || 0)) {
-      const reward = 3000;
+    // Zaten bu seviyede ödül almışsa tekrar verme
+    if (currentLevel <= (wordData.lastLevel || 0)) return;
 
-      await addBalance(userId, reward);
+    const reward = 3000;
+    await addBalance(userId, reward);
 
-      // Güncel seviyeyi kaydet
-      wordData.lastLevel = currentLevel;
-      await wordData.save();
+    // Güncel seviye kaydedilsin
+    wordData.lastLevel = currentLevel;
+    await wordData.save();
 
-      const channel = client.channels.cache.get(notificationChannelId);
-      if (channel) {
-        const embed = new MessageEmbed()
-          .setTitle('Seviye Atladınız!')
-          .setDescription(`🎉 Tebrikler <@${userId}>! **Seviye ${currentLevel}** oldunuz ve **${reward}$** kazandınız!`)
-          .setColor('#FFD700')
-          .setTimestamp();
+    const channel = client.channels.cache.get(notificationChannelId);
+    if (channel) {
+      const embed = new MessageEmbed()
+        .setTitle('Seviye Atladınız!')
+        .setDescription(`🎉 Tebrikler <@${userId}>! **Seviye ${currentLevel}** oldunuz ve **${reward}$** kazandınız!`)
+        .setColor('#FFD700')
+        .setTimestamp();
 
-        channel.send({ content: `<@${userId}>`, embeds: [embed] });
-      }
+      channel.send({ content: `<@${userId}>`, embeds: [embed] });
     }
   } catch (error) {
     console.error('Seviye ve ödül hesaplama hatası:', error);
@@ -226,28 +235,28 @@ const trackPartnerMessage = require('./utils/partner');
 
 const fiboBotId = '735147814878969968';
 
-const requireddRoleId = '1368538991632060436'; // Ödül verilecek rolün ID'si
+ // Ödül verilecek rolün ID'si
 // botu seviyesini kontrol et
 
 
 
 // messageCreate olayında kontrol
 client.on('messageCreate', async (message) => {
-    trackPartnerMessage(message);
+  trackPartnerMessage(message);
+
   if (message.author.id !== arcaneBotId) return;
   if (!message.content.includes('Yeni levelin')) return;
 
   // ✅ 1. Kullanıcıyı mesajdan çek
   const userIdMatch = message.content.match(/<@!?(\d+)>/);
   const userId = userIdMatch ? userIdMatch[1] : null;
-
   if (!userId) return;
 
   const member = await message.guild.members.fetch(userId).catch(() => null);
   if (!member) return;
 
-  // ❌ Eğer rol kontrolü yapmak istiyorsan:
-  // if (!member.roles.cache.has(requiredRoleId)) return;
+  // 🔒 Rol kontrolü
+  if (!member.roles.cache.has(requiredRoleId)) return;
 
   // ✅ 2. Level bilgisini mesajdan çek
   const levelMatch = message.content.match(/Yeni levelin \*\*(\d+)\*\*/i);
