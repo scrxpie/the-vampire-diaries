@@ -46,7 +46,7 @@ const balanceDataPath = path.join(__dirname, 'data', 'balances.json');
 
 // Ayarlar
 const excludedChannels = ['1327621148606988349','1327625994411970560']; // Hariç tutulacak kanallar
-const requiredRoleId = '1368538991632060436'; // Kelime sayımı için gerekli rol
+const requiredRoleId = '1327981428805210204'; // Kelime sayımı için gerekli rol
 const arcaneBotId = '437808476106784770'; // Arcane botunun ID'si
 const notificationChannelId = '1368539004823408719'; // Para bildirimi yapılacak kanal ID'si
 
@@ -171,7 +171,7 @@ async function addBalance(userId, amount) {
 }
 
 module.exports = { addBalance };
-const requiredRoleId = '1327981428805210204';
+
     // Eski seviye (kaydedilmiş)
     const Words = require('./models/Words');
 
