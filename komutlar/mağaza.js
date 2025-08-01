@@ -67,15 +67,15 @@ module.exports = {
         };
 
         const categoryImages = {
-            "Evler・🏠": "https://i.imgur.com/IUuEEnH.jpeg",
+            "Evler・🏠": "",
             "Araçlar・🚗": "https://i.imgur.com/5NjHuR0.gif",
-            "Takılar・💍": "https://i.imgur.com/d84DYvI.jpeg",
-            "Ateşli Silahlar ve Mühimmat・⚠️": "https://i.imgur.com/sTq6YqW.jpeg",
-            "Ritüel ve Büyü Malzemeleri・✨": "https://i.imgur.com/Cltn30O.jpeg",
-            "Doğa Temelli Silahlar ve Maddeler・🌿": "https://i.imgur.com/WyOa2pa.jpeg",
-            "Uzaktan Atış Silahları ve Oklar・🏹": "https://i.imgur.com/MKH9LRd.jpeg",
-            "Yakın Dövüş Silahları・🗡️": "https://i.imgur.com/W6RTET4.jpeg",
-            "Diğer Ekipmanlar ve Araçlar・🛠️": "https://i.imgur.com/1S9RMCe.jpeg"
+            "Takılar・💍": "",
+            "Ateşli Silahlar ve Mühimmat・⚠️": "",
+            "Ritüel ve Büyü Malzemeleri・✨": "",
+            "Doğa Temelli Silahlar ve Maddeler・🌿": "",
+            "Uzaktan Atış Silahları ve Oklar・🏹": "",
+            "Yakın Dövüş Silahları・🗡️": "",
+            "Diğer Ekipmanlar ve Araçlar・🛠️": ""
         };
 
         const options = Object.keys(categories).map(category => ({
