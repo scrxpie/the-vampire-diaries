@@ -38,11 +38,12 @@ module.exports = {
                 "**Tahta Uçlu Ok - 750$**\nVampirleri geçici felç eder.",
                 "**Normal Ok - 500$**\nDikkat dağıtmak için kullanılır."
             ],
-            "Yakın Dövüş Silahları・🗡️": [
-                "**Gümüş Bıçak - 5.000$**\nKurtadamlar ve lanetlilere karşı yakın dövüşte etkilidir.",
-                "**Gümüş Kazık - 7.000$**\nVampir ve hybridleri yok etmek için kullanılır.",
-                "**Tahta Kazık - 3.000$**\nVampirlerin kalbine saplandığında öldürür."
-            ],
+           "Yakın Dövüş Silahları・🗡️": [
+    "**Gümüş Bıçak - 5.000$**\nKurtadamlar ve lanetlilere karşı yakın dövüşte etkilidir.",
+    "**Gümüş Kazık - 7.000$**\nVampir ve hybridleri yok etmek için kullanılır.",
+    "**Tahta Kazık - 3.000$**\nVampirlerin kalbine saplandığında öldürür.",
+    "**İblis Bıçağı - 100.000$**\nKadim ritüellerle dövülmüş, cehennem taşları ve kutsal metal alaşımlarıyla güçlendirilmiş bu özel silah, iblis öldürmek için tasarlanmıştır."
+],
             "Doğa Temelli Silahlar ve Maddeler・🌿": [
                 "**Mine Otu - 500$**\nVampirleri zayıflatır, çeşitli yollarla verilebilir.",
                 "**Mine Bombası - 1500$**\nEtki alanına mine otu yayar.",
