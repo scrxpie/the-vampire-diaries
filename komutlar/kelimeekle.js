@@ -1,5 +1,5 @@
 const { MessageEmbed } = require('discord.js');
-const Words = require('../models/Wordss'); // model yolu yapına göre düzenle
+const Words = require('../models/Words'); // model yolu yapına göre düzenle
 
 module.exports = {
   name: 'kelimeekle',
