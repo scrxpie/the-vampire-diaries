@@ -24,7 +24,6 @@ fs.readdirSync(commandsDir).forEach(file => {
     }
 });
 require('./komutlar/activityWatcher');
-const importWordsData = require('./scripts/importWords');
 
 
 async function start() {
@@ -35,7 +34,7 @@ async function start() {
     });
     console.log("MongoDB'ye başarıyla bağlandı!");
 
-    await importWordsData();
+   
 const kelime = require('./komutlar/kelime');
 const hkelime = require('./komutlar/hkelime');
 
