@@ -7,11 +7,11 @@ module.exports = {
   execute(message) {
     const embed = new MessageEmbed()
       .setColor('#ffffff') // Koyu kırmızı renk
-      .setTitle('Kurtların Kraliçesi ')  // Başlık
-      .setDescription('O zaman yerine otur, sesini kes ve dinlemeye başla...')  // Açıklama
-      .setFooter('Deniz, dedikodu makinesi', musicIcons.heartIcon)  // Footer metni ve iconu
+      .setTitle('Leader of the Wolves ')  // Başlık
+      .setDescription('')  // Açıklama
+      .setFooter('Deniz.', musicIcons.heartIcon)  // Footer metni ve iconu
       .setTimestamp()  // Zaman damgası
-      .setImage('https://cdn.discordapp.com/attachments/1288593663802343434/1375838660691234849/078c27fdbed048fdae9cf1688ce3ae82.gif')
+      .setImage('https://cdn.discordapp.com/attachments/1288593663802343434/1376605559494807676/2d3fdd09ff0f301940a8e958fd580376.gif')
     return message.channel.send({ embeds: [embed] });  // Embed mesajı gönder
   }
 };
