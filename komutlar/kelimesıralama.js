@@ -1,5 +1,5 @@
 const { MessageEmbed } = require('discord.js');
-const Words = require('../models/Words'); // Model yolunu kendi dosya yapına göre güncelle
+const Words = require('../models/Wordss'); // Model yolunu kendi dosya yapına göre güncelle
 
 module.exports = {
   name: 'sıralama',
