@@ -1,5 +1,5 @@
 const { MessageEmbed } = require('discord.js');
-const Words = require('../models/Words');
+const Words = require('../models/Wordss');
 const AllowedChannel = require('../models/AllowedChannel');
 
 // Tüm izinli kanal ve kategori ID'lerini al
