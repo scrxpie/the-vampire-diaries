@@ -1,4 +1,4 @@
-const Words = require('../models/Wordss'); // Modelin doğru yolunu belirt
+const Words = require('../models/Words'); // Modelin doğru yolunu belirt
 
 module.exports = {
     name: 'kelimesil',
